@@ -2,37 +2,85 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.test > div:first-child div {
+  box-shadow: #0bafe6 0px 0px 2px 2px;
+}
+.test > div:first-child {
+  z-index: 1000;
+}
+.test > div:nth-child(2) {
+  animation: back2 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 999;
+}
+.test:hover > div:nth-child(2) {
+  animation: mymove2 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.test > div:nth-child(3) {
+  animation: back3 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 998;
+}
+.test:hover > div:nth-child(3) {
+  animation: mymove3 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.test > div:nth-child(4) {
+  animation: back4 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 997;
+}
+.test:hover > div:nth-child(4) {
+  animation: mymove4 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.overlay:hover {
+  transition: all 0.2s linear;
+  background-color: black;
+  opacity: 0.3;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
+@keyframes mymove2 {
   from {
-    transform: rotate(0deg);
+    transform: translateX(-100%);
   }
   to {
-    transform: rotate(360deg);
+    transform: translateX(0);
+  }
+}
+@keyframes back2 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes mymove3 {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes back3 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-200%);
+  }
+}
+@keyframes mymove4 {
+  from {
+    transform: translateX(-300%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes back4 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-300%);
   }
 }
