@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
+import Direct from "./components/Direct/Direct";
 import ListMap from "./components/ListMap/ListMap";
 import { setMap } from "./redux/features/mapSlice.js";
 function App() {
@@ -33,6 +34,7 @@ function App() {
       style={{ width: "100%", height: "100vh", position: "relative" }}
     >
       <ListMap />
+      <Direct />
     </div>
   );
 }
