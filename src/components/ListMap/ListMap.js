@@ -2,8 +2,14 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import ItemMap from "../ItemMap/ItemMap";
 import { ImageList } from "../../data";
+import { useSelector } from "react-redux";
 
 export default function BoxSx() {
+  const { value } = useSelector((state) => state.more);
+  const [position, setPosition] = React.useState(false);
+  React.useEffect(() => {
+    setPosition(value);
+  }, [value]);
   const [dataList, setDataList] = React.useState(ImageList);
   const [enter, setEnter] = React.useState(false);
 
@@ -23,7 +29,7 @@ export default function BoxSx() {
         borderRadius: "10px",
         zIndex: "100",
         bottom: "40px",
-        left: "15px",
+        left: position ? "430px" : "15px",
         width: enter ? 280 : 70,
         height: 70,
         overflow: "hidden",
@@ -31,6 +37,8 @@ export default function BoxSx() {
         transition: "width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)",
         display: "flex",
         cursor: "pointer",
+        // transitionDelay: "300ms",
+        transition: "left 300ms ease",
       }}
     >
       <Box
