@@ -3,12 +3,18 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import Direct from "./components/Direct/Direct";
+import Instruction from "./components/instruction/Instruction";
 import ListMap from "./components/ListMap/ListMap";
 import { setMap } from "./redux/features/mapSlice.js";
 function App() {
   const { value } = useSelector((state) => state.map);
   const dispatch = useDispatch();
   const getMap2 = useRef({});
+  const [realToggle, setRealToggle] = useState(false);
+  const { value: valueToggle } = useSelector((state) => state.toggle);
+  useEffect(() => {
+    setRealToggle(valueToggle);
+  }, [valueToggle]);
   getMap2.current = () => {
     if (!value) {
       let options = {
@@ -35,6 +41,7 @@ function App() {
     >
       <ListMap />
       <Direct />
+      {realToggle && <Instruction />}
     </div>
   );
 }
