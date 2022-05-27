@@ -1,8 +1,8 @@
 const InitMap = () => {
-  return <div></div>;
-};
+	return <div></div>
+}
 
-export default InitMap;
+export default InitMap
 
 // "eslintConfig": {
 //   "extends": [
