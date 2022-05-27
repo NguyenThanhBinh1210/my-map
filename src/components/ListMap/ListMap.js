@@ -22,6 +22,7 @@ export default function BoxSx() {
 
   return (
     <Box
+      className="list-img"
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       sx={{
@@ -33,11 +34,8 @@ export default function BoxSx() {
         width: enter ? 280 : 70,
         height: 70,
         overflow: "hidden",
-        backgroundColor: "primary.dark",
-        transition: "width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)",
         display: "flex",
         cursor: "pointer",
-        // transitionDelay: "300ms",
         transition: "left 300ms ease",
       }}
     >

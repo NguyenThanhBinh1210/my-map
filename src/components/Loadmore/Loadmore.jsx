@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import { setMore } from "../../redux/features/moreSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { setSuccess } from "../../redux/features/suggestSlice";
 const Loadmore = () => {
   const { value } = useSelector((state) => state.more);
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const Loadmore = () => {
   const handleLoadMore = () => {
     setLoadmore(!loadmore);
     dispatch(setMore(loadmore));
+    dispatch(setSuccess(false));
   };
   useEffect(() => {
     setRealMore(value);
@@ -50,7 +52,7 @@ const Loadmore = () => {
           lineHeight: "1px",
         }}
       >
-        {realMore ? "Thu gọn" : "Mở rộng"}
+        {realMore ? "Ẩn tất cả" : "Mở rộng"}
       </Typography>
       {realMore ? (
         <ExpandLessIcon fontSize="small" />

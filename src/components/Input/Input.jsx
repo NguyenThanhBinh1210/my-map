@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Stack,
@@ -15,7 +15,19 @@ import SearchIcon from "@mui/icons-material/Search";
 import DirectIcon from "../../assets/direction-right-solid-24.png";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import { useDispatch } from "react-redux";
+import { setToggle } from "../../redux/features/toggleSlice";
+import { setSuccess } from "../../redux/features/suggestSlice";
+
 const Input = () => {
+  const [toggle1] = useState(false);
+  const dispatch = useDispatch();
+  const handleShowSuggest = () => {
+    dispatch(setSuccess(true));
+  };
+  const handleToogle = () => {
+    dispatch(setToggle(!toggle1));
+  };
   return (
     <>
       <Stack
@@ -48,6 +60,7 @@ const Input = () => {
           }}
         >
           <input
+            onFocus={handleShowSuggest}
             type="text"
             style={{
               padding: "2px 10px",
@@ -65,7 +78,7 @@ const Input = () => {
           </Tooltip>
         </Stack>
         <Tooltip title="Chỉ đường">
-          <IconButton>
+          <IconButton onClick={handleToogle}>
             <img
               src={DirectIcon}
               alt=""
