@@ -7,7 +7,7 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { setToggle } from "../../redux/features/toggleSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const vehicleType = [
   {
@@ -29,14 +29,10 @@ const vehicleType = [
 ];
 
 const InstructionHeader = () => {
-  const { value } = useSelector((state) => state.toggle);
   const [active, setActive] = useState("Lái xe");
-  const handleActive = (id, yesId) => {
-    setActive(true);
-  };
   const dispatch = useDispatch();
   const handleClose = () => {
-    dispatch(setToggle(!value));
+    dispatch(setToggle(false));
   };
   return (
     <Stack
@@ -114,42 +110,6 @@ const InstructionHeader = () => {
               </IconButton>
             </Tooltip>
           ))}
-          {/* <Tooltip title="Đi xe máy">
-            <IconButton
-              sx={{
-                width: "60px",
-                height: "30px",
-                borderRadius: "20px",
-                padding: "0",
-              }}
-            >
-              <TwoWheelerIcon sx={{ color: "white" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Đi xe đạp">
-            <IconButton
-              sx={{
-                width: "60px",
-                height: "30px",
-                borderRadius: "20px",
-                padding: "0",
-              }}
-            >
-              <DirectionsBikeIcon sx={{ color: "white" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Đi bộ">
-            <IconButton
-              sx={{
-                width: "60px",
-                height: "30px",
-                borderRadius: "20px",
-                padding: "0",
-              }}
-            >
-              <DirectionsWalkIcon sx={{ color: "white" }} />
-            </IconButton>
-          </Tooltip> */}
         </Stack>
       </div>
       <div>

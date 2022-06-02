@@ -2,10 +2,9 @@ import React from "react";
 import InstructionHeader from "./InstructionHeader";
 import InstructionMain from "./InstructionMain";
 import { Stack } from "@mui/material";
-import { useSelector } from "react-redux";
-import { setToggle } from "../../redux/features/toggleSlice";
+import "./instruction.css";
 
-const Instruction = () => {
+const Instruction = ({ showDirect }) => {
   return (
     <>
       <Stack
@@ -19,10 +18,11 @@ const Instruction = () => {
           backgroundColor: "white",
           width: "100%",
           height: "100vh",
+          transform: showDirect ? "" : "translateX(-100%)",
+          transition: "transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)",
         }}
       >
         <Stack
-          height="200px"
           p={1}
           sx={{
             backgroundColor: "rgb(80, 143, 244)",

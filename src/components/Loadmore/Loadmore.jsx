@@ -52,7 +52,7 @@ const Loadmore = () => {
           lineHeight: "1px",
         }}
       >
-        {realMore ? "Ẩn tất cả" : "Mở rộng"}
+        {realMore ? "Ẩn tất cả" : "Xem nhiều hơn"}
       </Typography>
       {realMore ? (
         <ExpandLessIcon fontSize="small" />

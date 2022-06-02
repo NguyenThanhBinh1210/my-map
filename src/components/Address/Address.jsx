@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import HomeIcon from "@mui/icons-material/Home";
-import { Box, Stack, Typography } from "@mui/material";
-import CircleIcon from "../circleIcon/CircleIcon";
-import { useSelector } from "react-redux";
+import { Stack, Typography } from "@mui/material";
+import CircleIcon from "../CircleIcon/CircleIcon";
 
 const style = {
   width: "99.5%",
@@ -17,11 +16,6 @@ const style = {
 };
 
 const Address = () => {
-  // const { value } = useSelector((state) => state.more);
-  // const [hidden, setHidden] = useState(false);
-  // useEffect(() => {
-  //   setHidden(value);
-  // }, [value]);
   return (
     <>
       <List sx={style} component="nav" aria-label="address">

@@ -4,7 +4,7 @@ export const mapSlice = createSlice({
   name: "map",
   initialState: {
     value: null,
-    error: "",
+    error: false,
     loading: false,
   },
   reducers: {

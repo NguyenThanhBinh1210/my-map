@@ -5,16 +5,27 @@ import "./App.css";
 import Direct from "./components/Direct/Direct";
 import Instruction from "./components/instruction/Instruction";
 import ListMap from "./components/ListMap/ListMap";
+// import { setMapReal } from "./redux/apiRequest/mapRequest";
 import { setMap } from "./redux/features/mapSlice.js";
 function App() {
   const { value } = useSelector((state) => state.map);
   const dispatch = useDispatch();
   const getMap2 = useRef({});
   const [realToggle, setRealToggle] = useState(false);
+  const [showDirect, setShowDirect] = useState(true);
   const { value: valueToggle } = useSelector((state) => state.toggle);
   useEffect(() => {
     setRealToggle(valueToggle);
   }, [valueToggle]);
+  const handleRequest = (map) => {
+    try {
+      if (map) {
+        dispatch(setMap(map));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   getMap2.current = () => {
     if (!value) {
       let options = {
@@ -24,8 +35,8 @@ function App() {
         mapType: "roadmap",
       };
       let map = new map4d.Map(document.getElementById("map"), options);
-      console.log(map);
-      dispatch(setMap(map));
+      map.enable3dMode(true);
+      handleRequest(map);
     }
   };
 
@@ -39,9 +50,9 @@ function App() {
       id="map"
       style={{ width: "100%", height: "100vh", position: "relative" }}
     >
-      <ListMap />
-      <Direct />
-      {realToggle && <Instruction />}
+      <ListMap showDirect={showDirect} />
+      <Direct showDirect={showDirect} setShowDirect={setShowDirect} />
+      {realToggle && <Instruction showDirect={showDirect} />}
     </div>
   );
 }

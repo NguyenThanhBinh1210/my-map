@@ -3,8 +3,9 @@ import Box from "@mui/material/Box";
 import ItemMap from "../ItemMap/ItemMap";
 import { ImageList } from "../../data";
 import { useSelector } from "react-redux";
+import "./list_map.css";
 
-export default function BoxSx() {
+export default function BoxSx({ showDirect }) {
   const { value } = useSelector((state) => state.more);
   const [position, setPosition] = React.useState(false);
   React.useEffect(() => {
@@ -30,7 +31,7 @@ export default function BoxSx() {
         borderRadius: "10px",
         zIndex: "100",
         bottom: "40px",
-        left: position ? "430px" : "15px",
+        left: position && showDirect ? "430px" : "15px",
         width: enter ? 280 : 70,
         height: 70,
         overflow: "hidden",

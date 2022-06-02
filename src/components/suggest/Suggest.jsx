@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import CircleIcon from "../circleIcon/CircleIcon";
+import CircleIcon from "../CircleIcon/CircleIcon";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";

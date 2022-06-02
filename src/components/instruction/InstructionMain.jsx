@@ -1,151 +1,237 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
-import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
-import PlaceIcon from "@mui/icons-material/Place";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputBase,
-  InputLabel,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
-  NativeSelect,
-  Select,
-  Tooltip,
-} from "@mui/material";
-import { arrayMoveImmutable } from "array-move";
+import { Box, Tooltip, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Container, Draggable } from "react-smooth-dnd";
+import CloseIcon from "@mui/icons-material/Close";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import ListIconRender from "./ListIconRender";
 
+const data = [
+  {
+    id: uuidv4(),
+    content: "Chọn điểm đi",
+  },
+  {
+    id: uuidv4(),
+    content: "Chọn điểm đến",
+  },
+];
 const InstructionMain = () => {
-  const [items, setItems] = useState([
-    {
-      id: "1",
-      text: "Chọn điểm đi hoặc click trên bản đồ",
-      value: "",
-      label: "Vị trí của tôi",
-      color: "white",
-    },
-    {
-      id: "2",
-      text: "Chọn điểm đến",
-      value: "",
-      label: "Vị trí của tôi 2",
-      color: "white",
-    },
-  ]);
-  const onDrop = ({ removedIndex, addedIndex }) => {
-    setItems((items) => arrayMoveImmutable(items, removedIndex, addedIndex));
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
   };
+  const getItemStyle = (_, draggableStyle) => ({
+    ...draggableStyle,
+  });
+  const top100Films = [
+    { label: "Bình", id: 1 },
+    { label: "Sơn", id: 2 },
+    { label: "Tú", id: 3 },
+    { label: "Garena", id: 4 },
+    { label: "Discord", id: 5 },
+  ];
 
+  const [items, setItems] = useState([]);
+  const [listValue, setListValue] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [height, setHeight] = useState(100);
+  const [active, setActive] = useState("");
+
+  const handleVisible = (e) => {
+    setVisible(true);
+  };
+  const handleNotVisible = () => {
+    setVisible(false);
+  };
+  useEffect(() => {
+    setItems(data);
+  }, []);
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+    const reorderedItems = reorder(
+      items,
+      result.source.index,
+      result.destination.index
+    );
+    setItems(reorderedItems);
+  };
+  const handleAddInput = () => {
+    setShowAdd(false);
+    setItems([
+      ...items,
+      {
+        id: uuidv4(),
+        content: "Chọn điểm đến",
+      },
+    ]);
+    setHeight(height + 50);
+  };
+  const handleAddList = (_, value) => {
+    setListValue([...listValue, value]);
+    if (listValue.length > 0) {
+      setShowAdd(true);
+    }
+    // console.log(listValue);
+  };
+  const handleDeleteLocation = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+    setHeight(height - 50);
+    setActive("");
+  };
+  const handleSwap = () => {
+    const newItems = [...items];
+    const tmp = newItems[0];
+    newItems[0] = newItems[1];
+    newItems[1] = tmp;
+    setItems(newItems);
+  };
   return (
     <>
-      <Container dragHandleSelector=".drag-handle" lockAxis="y" onDrop={onDrop}>
-        {items.map(({ id, text, value }) => (
-          <Draggable className="drag-handle" key={id}>
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{
-                width: 400,
-                display: "flex",
-                alignItems: "flex-end",
-                marginLeft: "10px",
-                paddingLeft: "30px",
-                zIndex: 100,
-              }}
-            >
-              <Autocomplete
-                className="autocomplete-css"
-                sx={{ width: 320, display: "flex" }}
-                id="open-on-focus"
-                options={top100Films}
-                renderOption={(props, option) => (
-                  <Box
-                    component="li"
-                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                    {...props}
-                  >
-                    <LocationOnIcon
-                      sx={{
-                        marginRight: "10px",
-                        color: "rgb(80, 143, 244)",
-                      }}
-                    />
-                    {option.label}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder={text}
-                    variant="standard"
-                    onChange={(e) => console.log(e.target.value)}
-                    sx={{
-                      color: "white",
-                    }}
-                  />
-                )}
-              />
-            </Stack>
-          </Draggable>
-        ))}
-      </Container>
-      <>
-        <MoreVertIcon
-          fontSize="small"
+      <div className="main_content">
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="nammoadidaphat"
+                style={{
+                  height: `${height}px`,
+                }}
+              >
+                {items.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        className="card"
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style
+                        )}
+                      >
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          onMouseOver={() => setActive(item.id)}
+                          onMouseOut={() => setActive("")}
+                          sx={{
+                            width: 400,
+                            display: "flex",
+                            alignItems: "flex-end",
+                            marginLeft: "10px",
+                            paddingLeft: "30px",
+                            zIndex: 100,
+                            position: "relative",
+                          }}
+                        >
+                          <Autocomplete
+                            className="autocomplete-css"
+                            sx={{
+                              width: 320,
+                              display: "flex",
+                            }}
+                            onChange={handleAddList}
+                            isOptionEqualToValue={(option, value) =>
+                              option.id === value.id
+                            }
+                            id="open-on-focus"
+                            options={top100Films}
+                            renderOption={(props, option) => (
+                              <Box
+                                component="li"
+                                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                                {...props}
+                              >
+                                <LocationOnIcon
+                                  sx={{
+                                    marginRight: "10px",
+                                    color: "rgb(80, 143, 244)",
+                                  }}
+                                />
+                                {option.label}
+                              </Box>
+                            )}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder={item.content}
+                                variant="standard"
+                                sx={{
+                                  color: "white",
+                                }}
+                              />
+                            )}
+                          />
+                          <Tooltip title="Xóa địa điểm này" placement="right">
+                            <button
+                              onClick={() => handleDeleteLocation(index)}
+                              style={{
+                                position: "absolute",
+                                top: "10px",
+                                right: "40px",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                outline: "none",
+                                cursor: "pointer",
+                                display:
+                                  item.id === active && items.length > 2
+                                    ? "flex"
+                                    : "none",
+                              }}
+                            >
+                              <CloseIcon sx={{ color: "white" }}></CloseIcon>
+                            </button>
+                          </Tooltip>
+                        </Stack>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
+      <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>
+      {showAdd && items.length < 6 ? (
+        <Stack
+          onClick={handleAddInput}
           sx={{
-            color: "white",
-            position: "absolute",
-            top: "90px",
-            left: "19px",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            cursor: "pointer",
+            marginBottom: "10px",
+            transform: "translateX(10px)",
           }}
-        ></MoreVertIcon>
-        <Tooltip
-          title="Đảo ngược điểm xuất phát và điểm đến"
-          arrow
-          placement="right"
         >
-          <SwapVertIcon
-            fontSize="large"
+          <AddLocationAltIcon
             sx={{
+              marginRight: "5px",
               color: "white",
-              position: "absolute",
-              top: "90px",
-              right: "10px",
+              fontSize: "20px",
             }}
           />
-        </Tooltip>
-        <CircleOutlinedIcon
-          fontSize="small"
-          sx={{
-            color: "white",
-            paddingBottom: "10px",
-            display: "flex",
-            position: "absolute",
-            top: "70px",
-            left: "19px",
-          }}
-        />
-        <PlaceIcon
-          fontSize="small"
-          sx={{
-            color: "white",
-            paddingBottom: "10px",
-            position: "absolute",
-            top: "110px",
-            left: "19px",
-          }}
-        />
-      </>
+          <Typography variant="subtext1" sx={{ color: "white" }}>
+            Thêm điểm đến
+          </Typography>
+        </Stack>
+      ) : null}
       <Stack
         direction="row"
         sx={{
@@ -154,8 +240,10 @@ const InstructionMain = () => {
           maxWidth: "300px",
           backgroundColor: "white",
           margin: "15px auto",
+          // paddingTop: "100px",
           borderRadius: "5px",
           overflow: "hidden",
+          marginTop: "auto",
         }}
       >
         <Box
@@ -199,9 +287,5 @@ const InstructionMain = () => {
     </>
   );
 };
-const top100Films = [
-  { label: "Vị trí của tôi", year: 1994, color: "white" },
-  { label: "Vị trí của tôi 2", year: 1994, color: "white" },
-];
 
 export default InstructionMain;

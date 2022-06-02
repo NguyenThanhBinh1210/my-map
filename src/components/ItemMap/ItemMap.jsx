@@ -29,6 +29,7 @@ const ItemMap = ({ children, news, image, name, dataList, setDataList }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        transition: "all 1000 ease",
       }}
     >
       <Box
