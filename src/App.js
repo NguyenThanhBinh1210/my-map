@@ -5,7 +5,6 @@ import "./App.css";
 import Direct from "./components/Direct/Direct";
 import Instruction from "./components/instruction/Instruction";
 import ListMap from "./components/ListMap/ListMap";
-// import { setMapReal } from "./redux/apiRequest/mapRequest";
 import { setMap } from "./redux/features/mapSlice.js";
 function App() {
   const { value } = useSelector((state) => state.map);
