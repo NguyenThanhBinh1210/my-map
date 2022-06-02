@@ -4,7 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import HomeIcon from "@mui/icons-material/Home";
 import { Stack, Typography } from "@mui/material";
-import CircleIcon from "../circleIcon/CircleIcon";
+import CircleIcon from "../CircleIcon/CircleIcon";
 
 const style = {
   width: "99.5%",
