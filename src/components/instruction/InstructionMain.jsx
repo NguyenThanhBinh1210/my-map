@@ -9,17 +9,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CloseIcon from "@mui/icons-material/Close";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import ListIconRender from "./ListIconRender";
+import { initialData } from "../../data";
 
-const data = [
-  {
-    id: uuidv4(),
-    content: "Chọn điểm đi",
-  },
-  {
-    id: uuidv4(),
-    content: "Chọn điểm đến",
-  },
-];
 const InstructionMain = () => {
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -36,24 +27,13 @@ const InstructionMain = () => {
     { label: "Tú", id: 3 },
     { label: "Garena", id: 4 },
     { label: "Discord", id: 5 },
+    { label: "Tiktok", id: 6 },
   ];
-
   const [items, setItems] = useState([]);
   const [listValue, setListValue] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [height, setHeight] = useState(100);
   const [active, setActive] = useState("");
-
-  const handleVisible = (e) => {
-    setVisible(true);
-  };
-  const handleNotVisible = () => {
-    setVisible(false);
-  };
-  useEffect(() => {
-    setItems(data);
-  }, []);
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -63,6 +43,12 @@ const InstructionMain = () => {
       result.source.index,
       result.destination.index
     );
+    const reorderedList = reorder(
+      listValue,
+      result.source.index,
+      result.destination.index
+    );
+    setListValue(reorderedList);
     setItems(reorderedItems);
   };
   const handleAddInput = () => {
@@ -76,27 +62,55 @@ const InstructionMain = () => {
     ]);
     setHeight(height + 50);
   };
-  const handleAddList = (_, value) => {
-    setListValue([...listValue, value]);
+  const handleChangeInput = (index, value) => {
+    if (value === null) {
+      const lastListValue = [...listValue];
+      lastListValue.splice(index, 1, null);
+      setListValue(lastListValue);
+    }
+    const newList = [...listValue];
+    newList.splice(index, 1, value);
+    setListValue(newList);
+
     if (listValue.length > 0) {
       setShowAdd(true);
     }
-    // console.log(listValue);
   };
   const handleDeleteLocation = (index) => {
     const newItems = [...items];
+    const newList = [...listValue];
     newItems.splice(index, 1);
+    newList.splice(index, 1);
     setItems(newItems);
+    setListValue(newList);
     setHeight(height - 50);
     setActive("");
   };
   const handleSwap = () => {
-    const newItems = [...items];
-    const tmp = newItems[0];
-    newItems[0] = newItems[1];
-    newItems[1] = tmp;
-    setItems(newItems);
+    if (listValue.length === 2 && listValue.every((item) => item !== null)) {
+      const newItems = [...items];
+      const newValue = [...listValue];
+      const tmp1 = newItems[0];
+      newItems[0] = newItems[1];
+      newItems[1] = tmp1;
+      const tmp2 = newValue[0];
+      newValue[0] = newValue[1];
+      newValue[1] = tmp2;
+      setItems(newItems);
+      setListValue(newValue);
+    }
   };
+  useEffect(() => {
+    const someListValue = listValue.some((value) => value === null);
+    if (someListValue) {
+      setShowAdd(false);
+    }
+  }, [listValue]);
+  useEffect(() => {
+    initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
+    setItems(initialData);
+  }, []);
+
   return (
     <>
       <div className="main_content">
@@ -125,19 +139,11 @@ const InstructionMain = () => {
                         )}
                       >
                         <Stack
+                          className="stack-mouse"
                           direction="row"
                           spacing={1}
                           onMouseOver={() => setActive(item.id)}
                           onMouseOut={() => setActive("")}
-                          sx={{
-                            width: 400,
-                            display: "flex",
-                            alignItems: "flex-end",
-                            marginLeft: "10px",
-                            paddingLeft: "30px",
-                            zIndex: 100,
-                            position: "relative",
-                          }}
                         >
                           <Autocomplete
                             className="autocomplete-css"
@@ -145,18 +151,16 @@ const InstructionMain = () => {
                               width: 320,
                               display: "flex",
                             }}
-                            onChange={handleAddList}
+                            onChange={(event, value) =>
+                              handleChangeInput(index, value)
+                            }
                             isOptionEqualToValue={(option, value) =>
                               option.id === value.id
                             }
                             id="open-on-focus"
                             options={top100Films}
                             renderOption={(props, option) => (
-                              <Box
-                                component="li"
-                                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                                {...props}
-                              >
+                              <Box component="li" {...props}>
                                 <LocationOnIcon
                                   sx={{
                                     marginRight: "10px",
@@ -179,15 +183,9 @@ const InstructionMain = () => {
                           />
                           <Tooltip title="Xóa địa điểm này" placement="right">
                             <button
+                              className="button-delete-location"
                               onClick={() => handleDeleteLocation(index)}
                               style={{
-                                position: "absolute",
-                                top: "10px",
-                                right: "40px",
-                                backgroundColor: "transparent",
-                                border: "none",
-                                outline: "none",
-                                cursor: "pointer",
                                 display:
                                   item.id === active && items.length > 2
                                     ? "flex"
@@ -209,17 +207,7 @@ const InstructionMain = () => {
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>
       {showAdd && items.length < 6 ? (
-        <Stack
-          onClick={handleAddInput}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row",
-            cursor: "pointer",
-            marginBottom: "10px",
-            transform: "translateX(10px)",
-          }}
-        >
+        <Stack className="stack-add-input" onClick={handleAddInput}>
           <AddLocationAltIcon
             sx={{
               marginRight: "5px",
@@ -232,43 +220,9 @@ const InstructionMain = () => {
           </Typography>
         </Stack>
       ) : null}
-      <Stack
-        direction="row"
-        sx={{
-          display: "flex",
-          width: "100%",
-          maxWidth: "300px",
-          backgroundColor: "white",
-          margin: "15px auto",
-          // paddingTop: "100px",
-          borderRadius: "5px",
-          overflow: "hidden",
-          marginTop: "auto",
-        }}
-      >
-        <Box
-          variant="contained"
-          sx={{
-            backgroundColor: "white",
-            color: "rgb(123, 123, 123)",
-            fontSize: "12px",
-            width: "80px",
-          }}
-        >
-          <button
-            className="button-search"
-            style={{
-              width: "100%",
-              color: "rgb(123, 123, 123)",
-              padding: "10px",
-              outline: "none",
-              border: "none",
-              cursor: "pointer",
-              transition: "all 300ms ease",
-            }}
-          >
-            Tìm kiếm
-          </button>
+      <Stack className="stack-wrapper-search" direction="row">
+        <Box className="box-wrapper-button" variant="contained">
+          <button className="button-search">Tìm kiếm</button>
         </Box>
         <select
           defaultValue="Cân bằng"

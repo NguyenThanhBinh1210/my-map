@@ -8,25 +8,7 @@ import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { setToggle } from "../../redux/features/toggleSlice";
 import { useDispatch } from "react-redux";
-
-const vehicleType = [
-  {
-    id: 1,
-    name: "Lái xe",
-  },
-  {
-    id: 2,
-    name: "Đi xe máy",
-  },
-  {
-    id: 3,
-    name: "Đi xe đạp",
-  },
-  {
-    id: 4,
-    name: "Đi bộ",
-  },
-];
+import { vehicleType } from "../../data";
 
 const InstructionHeader = () => {
   const [active, setActive] = useState("Lái xe");
@@ -64,11 +46,9 @@ const InstructionHeader = () => {
               onClick={() => setActive(item.name)}
             >
               <IconButton
+                className="icon-button-type"
                 sx={{
-                  width: "60px",
-                  height: "30px",
                   borderRadius: "20px",
-                  padding: "0",
                   backgroundColor: item.name === active ? "white" : "",
                   ":hover": {
                     backgroundColor: item.name === active ? "white" : "",

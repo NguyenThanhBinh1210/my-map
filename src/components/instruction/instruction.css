@@ -1,13 +1,62 @@
+.instruction {
+  max-width: 420px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  background-color: white;
+  width: 100%;
+  height: 100vh;
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.stack-mouse {
+  width: 400px;
+  display: flex;
+  align-items: flex-end;
+  margin-left: 10px;
+  padding-left: 30px;
+  z-index: 100;
+  position: relative;
+}
+
+.stack-add-input {
+  display: flex;
+  align-items: center;
+  flex-direction: row !important;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transform: translateX(10px);
+}
+
+.box-wrapper-button {
+  background-color: white;
+  color: rgb(123, 123, 123);
+  font-size: 12px;
+  width: 80px;
+}
+
+.stack-wrapper-search {
+  display: flex;
+  width: 100%;
+  max-width: 300px;
+  background-color: white;
+  margin: 15px auto;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+/* AUTOCOMPLETE */
 .autocomplete-css {
   padding: 8px 0;
 }
-
 .autocomplete-css > div > label {
   color: white;
 }
-
 .autocomplete-css > div > div {
-  border-bottom: 0.51px solid rgba(250, 250, 250, 0.371);
+  border-bottom: 0.51px solid #fafaface;
 }
 
 .autocomplete-css > div > div::before {
@@ -22,9 +71,74 @@
 .autocomplete-css > div > div > input::placeholder {
   color: white !important;
 }
+
+/* BUTTON CSS */
 .button-search {
   background-color: white;
+  width: 100%;
+  color: rgb(123, 123, 123);
+  padding: 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 300ms ease;
 }
 .button-search:hover {
   background-color: #ccc;
+}
+.button-delete-location {
+  position: absolute;
+  top: 10px;
+  right: 40px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.icon-button-type {
+  width: 60px;
+  height: 30px;
+  padding: 0;
+}
+
+/* ICON CSS */
+
+.list-icon {
+  position: absolute;
+  background-color: white;
+  top: 50px;
+}
+
+.circle-icon {
+  color: white;
+  padding-bottom: 10px;
+  display: flex;
+  position: absolute;
+  top: 65px;
+  left: 19px;
+}
+
+.more-icon {
+  color: white;
+  position: absolute;
+  top: 90px;
+  left: 19px;
+}
+
+.swap-icon {
+  color: white;
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.place-icon {
+  color: white;
+  padding-bottom: 10px;
+  position: absolute;
+  top: 115px;
+  left: 19px;
 }
