@@ -8,8 +8,8 @@ import { Tooltip } from "@mui/material";
 const ListIconRender = ({ items, handleSwap }) => {
   return (
     <div>
-      <CircleOutlinedIcon className="circle-icon" fontSize="small" />
-      <MoreVertIcon className="more-icon" fontSize="small" />
+      <CircleOutlinedIcon className="circle-icon" />
+      <MoreVertIcon className="more-icon" />
       {items.length < 3 && (
         <>
           <Tooltip
@@ -17,98 +17,46 @@ const ListIconRender = ({ items, handleSwap }) => {
             arrow
             placement="right"
           >
-            <SwapVertIcon
-              className="swap-icon"
-              fontSize="large"
-              onClick={handleSwap}
-            />
+            <SwapVertIcon className="swap-icon" onClick={handleSwap} />
           </Tooltip>
-          <PlaceIcon className="place-icon" fontSize="small" />
+          <PlaceIcon className="place-icon" />
         </>
       )}
       {items.length >= 3 && (
         <>
-          <MoreVertIcon
-            fontSize="small"
-            className="more-icon"
-            sx={{ top: "137px" }}
-          />
-          <CircleOutlinedIcon
-            fontSize="small"
-            className="circle-icon"
-            sx={{ top: "115px" }}
-          />
+          <MoreVertIcon className="more-icon" sx={{ top: "137px" }} />
+          <CircleOutlinedIcon className="circle-icon" sx={{ top: "115px" }} />
         </>
       )}
       {items.length === 3 && (
-        <PlaceIcon
-          fontSize="small"
-          className="place-icon"
-          sx={{ top: "160px" }}
-        />
+        <PlaceIcon className="place-icon" sx={{ top: "160px" }} />
       )}
       {items.length >= 4 && (
         <>
-          <MoreVertIcon
-            fontSize="small"
-            className="more-icon"
-            sx={{ top: "185px" }}
-          />
-          <CircleOutlinedIcon
-            fontSize="small"
-            className="circle-icon"
-            sx={{ top: "160px" }}
-          />
+          <MoreVertIcon className="more-icon" sx={{ top: "185px" }} />
+          <CircleOutlinedIcon className="circle-icon" sx={{ top: "160px" }} />
         </>
       )}
       {items.length === 4 && (
-        <PlaceIcon
-          fontSize="small"
-          className="place-icon"
-          sx={{ top: "210px" }}
-        />
+        <PlaceIcon className="place-icon" sx={{ top: "210px" }} />
       )}
       {items.length >= 5 && (
         <>
-          <CircleOutlinedIcon
-            fontSize="small"
-            className="circle-icon"
-            sx={{ top: "210px" }}
-          />
-          <MoreVertIcon
-            fontSize="small"
-            className="more-icon"
-            sx={{ top: "235px" }}
-          />
+          <CircleOutlinedIcon className="circle-icon" sx={{ top: "210px" }} />
+          <MoreVertIcon className="more-icon" sx={{ top: "235px" }} />
         </>
       )}
       {items.length === 5 && (
-        <PlaceIcon
-          fontSize="small"
-          className="place-icon"
-          sx={{ top: "255px" }}
-        />
+        <PlaceIcon className="place-icon" sx={{ top: "255px" }} />
       )}
       {items.length >= 6 && (
         <>
-          <CircleOutlinedIcon
-            fontSize="small"
-            className="circle-icon"
-            sx={{ top: "258px" }}
-          />
-          <MoreVertIcon
-            fontSize="small"
-            className="more-icon"
-            sx={{ top: "285px" }}
-          />
+          <CircleOutlinedIcon className="circle-icon" sx={{ top: "258px" }} />
+          <MoreVertIcon className="more-icon" sx={{ top: "285px" }} />
         </>
       )}
       {items.length === 6 && (
-        <PlaceIcon
-          fontSize="small"
-          className="place-icon"
-          sx={{ top: "310px" }}
-        />
+        <PlaceIcon className="place-icon" sx={{ top: "310px" }} />
       )}
     </div>
   );
