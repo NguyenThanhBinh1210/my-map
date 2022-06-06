@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import InstructionHeader from "./InstructionHeader";
 import InstructionMain from "./InstructionMain";
 import { Stack } from "@mui/material";
 import "./instruction.css";
 
 const Instruction = ({ showDirect }) => {
+  const [mode, setMode] = useState("car");
   return (
     <>
       <Stack
@@ -19,8 +20,8 @@ const Instruction = ({ showDirect }) => {
             backgroundColor: "rgb(80, 143, 244)",
           }}
         >
-          <InstructionHeader></InstructionHeader>
-          <InstructionMain></InstructionMain>
+          <InstructionHeader setMode={setMode}></InstructionHeader>
+          <InstructionMain mode={mode}></InstructionMain>
         </Stack>
       </Stack>
     </>

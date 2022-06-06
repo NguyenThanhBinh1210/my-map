@@ -32,6 +32,9 @@
   background-color: black;
   opacity: 0.3;
 }
+.list-img {
+  transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+}
 
 @keyframes mymove2 {
   from {

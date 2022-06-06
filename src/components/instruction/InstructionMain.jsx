@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
@@ -10,30 +11,35 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import ListIconRender from "./ListIconRender";
 import { initialData } from "../../data";
+import { useSelector } from "react-redux";
+import { setPolyline } from "../../redux/features/polylineSlice";
+import { useDispatch } from "react-redux";
 
-const InstructionMain = () => {
+const InstructionMain = ({ mode }) => {
+  const dispatch = useDispatch();
+  const [listValue, setListValue] = useState([]);
+
+  const [router, setRouter] = useState([]);
+  const listSteps = router?.result?.routes[0]?.legs[0]?.steps;
+  const listPolyline = listSteps?.map((step) => {
+    return [step.startLocation.lng, step.startLocation.lat];
+  });
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const { locations } = useSelector((state) => state.location);
+
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   };
-  const getItemStyle = (_, draggableStyle) => ({
-    ...draggableStyle,
-  });
-  const top100Films = [
-    { label: "Bình", id: 1 },
-    { label: "Sơn", id: 2 },
-    { label: "Tú", id: 3 },
-    { label: "Garena", id: 4 },
-    { label: "Discord", id: 5 },
-    { label: "Tiktok", id: 6 },
-  ];
   const [items, setItems] = useState([]);
-  const [listValue, setListValue] = useState([]);
+
   const [showAdd, setShowAdd] = useState(false);
   const [height, setHeight] = useState(100);
   const [active, setActive] = useState("");
+
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -48,9 +54,22 @@ const InstructionMain = () => {
       result.source.index,
       result.destination.index
     );
-    setListValue(reorderedList);
-    setItems(reorderedItems);
+    if (listValue.length !== 0) {
+      setListValue(reorderedList);
+      setItems(reorderedItems);
+    }
   };
+  const handleRouter = () => {
+    dispatch(setPolyline(listPolyline));
+  };
+  useEffect(() => {
+    if (listValue.length !== 0) {
+      const realStart = listValue[0].split(" ").join("");
+      const realEnd = listValue[listValue.length - 1].split(" ").join("");
+      setStart(realStart);
+      setEnd(realEnd);
+    }
+  }, [listValue]);
   const handleAddInput = () => {
     setShowAdd(false);
     setItems([
@@ -68,9 +87,11 @@ const InstructionMain = () => {
       lastListValue.splice(index, 1, null);
       setListValue(lastListValue);
     }
-    const newList = [...listValue];
-    newList.splice(index, 1, value);
-    setListValue(newList);
+    if (value) {
+      const newList = [...listValue];
+      newList.splice(index, 1, value.label);
+      setListValue(newList);
+    }
 
     if (listValue.length > 0) {
       setShowAdd(true);
@@ -110,7 +131,17 @@ const InstructionMain = () => {
     initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
     setItems(initialData);
   }, []);
-
+  useEffect(() => {
+    if (start && end) {
+      async function getResults() {
+        const results = await axios(
+          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${mode}`
+        );
+        setRouter(results.data);
+      }
+      getResults();
+    }
+  }, [start, end]);
   return (
     <>
       <div className="main_content">
@@ -133,17 +164,13 @@ const InstructionMain = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
                       >
                         <Stack
                           className="stack-mouse"
                           direction="row"
                           spacing={1}
-                          onMouseOver={() => setActive(item.id)}
-                          onMouseOut={() => setActive("")}
+                          onMouseEnter={() => setActive(item.id)}
+                          onMouseLeave={() => setActive("")}
                         >
                           <Autocomplete
                             className="autocomplete-css"
@@ -158,7 +185,7 @@ const InstructionMain = () => {
                               option.id === value.id
                             }
                             id="open-on-focus"
-                            options={top100Films}
+                            options={locations}
                             renderOption={(props, option) => (
                               <Box component="li" {...props}>
                                 <LocationOnIcon
@@ -222,7 +249,9 @@ const InstructionMain = () => {
       ) : null}
       <Stack className="stack-wrapper-search" direction="row">
         <Box className="box-wrapper-button" variant="contained">
-          <button className="button-search">Tìm kiếm</button>
+          <button className="button-search" onClick={handleRouter}>
+            Tìm kiếm
+          </button>
         </Box>
         <select
           defaultValue="Cân bằng"

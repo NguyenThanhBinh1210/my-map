@@ -117,6 +117,7 @@
   position: absolute;
   top: 65px;
   left: 19px;
+  font-size: 20px !important;
 }
 
 .more-icon {
@@ -124,6 +125,7 @@
   position: absolute;
   top: 90px;
   left: 19px;
+  font-size: 20px !important;
 }
 
 .swap-icon {
@@ -133,6 +135,7 @@
   right: 10px;
   z-index: 1000;
   cursor: pointer;
+  font-size: 35px !important;
 }
 
 .place-icon {
@@ -141,4 +144,5 @@
   position: absolute;
   top: 115px;
   left: 19px;
+  font-size: 20px !important;
 }

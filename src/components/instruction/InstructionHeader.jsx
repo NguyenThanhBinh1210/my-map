@@ -10,11 +10,26 @@ import { setToggle } from "../../redux/features/toggleSlice";
 import { useDispatch } from "react-redux";
 import { vehicleType } from "../../data";
 
-const InstructionHeader = () => {
+const InstructionHeader = ({ setMode }) => {
   const [active, setActive] = useState("Lái xe");
   const dispatch = useDispatch();
   const handleClose = () => {
     dispatch(setToggle(false));
+  };
+  const handleSetMode = (type) => {
+    setActive(type);
+    if (type === "Lái xe") {
+      setMode("car");
+    }
+    if (type === "Đi xe máy") {
+      setMode("motorcycle");
+    }
+    if (type === "Đi xe đạp") {
+      setMode("bike");
+    }
+    if (type === "Đi bộ") {
+      setMode("foot");
+    }
   };
   return (
     <Stack
@@ -40,11 +55,7 @@ const InstructionHeader = () => {
           }}
         >
           {vehicleType.map((item) => (
-            <Tooltip
-              key={item.id}
-              title={item.name}
-              onClick={() => setActive(item.name)}
-            >
+            <Tooltip key={item.id} title={item.name}>
               <IconButton
                 className="icon-button-type"
                 sx={{
@@ -54,6 +65,7 @@ const InstructionHeader = () => {
                     backgroundColor: item.name === active ? "white" : "",
                   },
                 }}
+                onClick={() => handleSetMode(item.name)}
               >
                 {item.name === "Lái xe" && (
                   <DirectionsCarIcon
