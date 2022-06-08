@@ -14,6 +14,7 @@ import { initialData } from "../../data";
 import { useSelector } from "react-redux";
 import { setPolyline } from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
+import { setInput } from "../../redux/features/inputSlice";
 
 const InstructionMain = ({ mode }) => {
   const dispatch = useDispatch();
@@ -62,14 +63,20 @@ const InstructionMain = ({ mode }) => {
   const handleRouter = () => {
     dispatch(setPolyline(listPolyline));
   };
+
   useEffect(() => {
     if (listValue.length !== 0) {
-      const realStart = listValue[0].split(" ").join("");
-      const realEnd = listValue[listValue.length - 1].split(" ").join("");
-      setStart(realStart);
-      setEnd(realEnd);
+      if (listValue[0]) {
+        const realStart = listValue[0].split(" ").join("");
+        setStart(realStart);
+      }
+      if (listValue[listValue.length - 1]) {
+        const realEnd = listValue[listValue.length - 1].split(" ").join("");
+        setEnd(realEnd);
+      }
     }
   }, [listValue]);
+
   const handleAddInput = () => {
     setShowAdd(false);
     setItems([
@@ -126,6 +133,7 @@ const InstructionMain = ({ mode }) => {
     if (someListValue) {
       setShowAdd(false);
     }
+    dispatch(setInput(listValue));
   }, [listValue]);
   useEffect(() => {
     initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
