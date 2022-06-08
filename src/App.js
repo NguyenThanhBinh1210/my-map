@@ -8,68 +8,54 @@ import ListMap from "./components/ListMap/ListMap";
 import { setLocations } from "./redux/features/locationSlice";
 import { setMap } from "./redux/features/mapSlice.js";
 import { v4 as uuidv4 } from "uuid";
+import { getPolyline } from "./components/getPolyline";
 
 function App() {
-  const { value } = useSelector((state) => state.map);
+  const { value: inputValue } = useSelector((state) => state.input);
+  const { value: valueMap } = useSelector((state) => state.map);
   const { value: valuePolyline } = useSelector((state) => state.polyline);
-  console.log(valuePolyline);
-  const dispatch = useDispatch();
-  // const getMap2 = useRef({});
+  const { value: valueToggle } = useSelector((state) => state.toggle);
   const [realToggle, setRealToggle] = useState(false);
   const [showDirect, setShowDirect] = useState(true);
   const [listLocation, setListLocation] = useState([]);
-  const { value: valueToggle } = useSelector((state) => state.toggle);
-  const handleRequest = (map) => {
-    try {
-      if (map) {
-        dispatch(setMap(map));
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const dispatch = useDispatch();
 
   const getMap2 = () => {
-    if (!value) {
-      let options = {
-        center: { lat: 16.072163491469226, lng: 108.22690536081757 },
-        zoom: 15,
-        controls: true,
-        mapType: "roadmap",
-      };
-      let map = new map4d.Map(document.getElementById("map"), options);
+    let options = {
+      center: { lat: 16.072163491469226, lng: 108.22690536081757 },
+      zoom: 15,
+      controls: true,
+      mapType: "roadmap",
+    };
+    const map = new map4d.Map(document.getElementById("map"), options);
+    dispatch(setMap(map));
 
-      let polyline = new map4d.Polyline({
-        path: [],
-        strokeColor: "#508ff4",
-        strokeOpacity: 1.0,
-        strokeWidth: 10,
+    map.addListener("click", function (args) {
+      let marker = new map4d.Marker({
+        position: args.location,
       });
-      // Thêm polyline vào bản đồ
-      polyline.setMap(map);
+      marker.setMap(map);
 
-      handleRequest(map);
-      map.addListener("click", function (args) {
-        let marker = new map4d.Marker({
-          position: args.location,
-        });
-        marker.setMap(map);
-        const markerValueNumber = [args.location.lat, args.location.lng];
-        const locationMarker = markerValueNumber.join(", ");
-        setListLocation((prev) => [
-          ...prev,
-          {
-            id: uuidv4(),
-            label: locationMarker,
-          },
-        ]);
-      });
-    }
+      const markerValueNumber = [args.location.lat, args.location.lng];
+      const locationMarker = markerValueNumber.join(", ");
+      setListLocation((prev) => [
+        ...prev,
+        {
+          id: uuidv4(),
+          label: locationMarker,
+        },
+      ]);
+    });
+    // }
   };
 
   useEffect(() => {
     getMap2();
-  }, [value]);
+  }, []);
+
+  useEffect(() => {
+    getPolyline(valuePolyline, valueMap, inputValue);
+  }, [valuePolyline]);
 
   useEffect(() => {
     setRealToggle(valueToggle);
