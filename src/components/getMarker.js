@@ -7,12 +7,13 @@ export const getMarker = (map, setListLocation, uuidv4) => {
 
     const markerValueNumber = [args.location.lat, args.location.lng];
     const locationMarker = markerValueNumber.join(", ");
-    setListLocation((prev) => [
-      ...prev,
-      {
-        id: uuidv4(),
-        label: locationMarker,
-      },
-    ]);
+    // setListLocation((prev) => [
+    //   ...prev,
+    //   {
+    //     id: uuidv4(),
+    //     label: locationMarker,
+    //   },
+    // ]);
+    setListLocation((prev) => [...prev, locationMarker]);
   });
 };
