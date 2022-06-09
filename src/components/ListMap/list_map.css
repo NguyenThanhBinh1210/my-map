@@ -1,39 +1,57 @@
-.test > div:first-child div {
+.list-img-item {
+  display: flex;
+}
+.list-img-item > div:first-child div {
   box-shadow: #0bafe6 0px 0px 2px 2px;
 }
-.test > div:first-child {
+
+.list-img-item > div:first-child {
   z-index: 1000;
 }
-.test > div:nth-child(2) {
+.list-img-item > div:nth-child(2) {
   animation: back2 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   z-index: 999;
   color: rgb(123, 123, 123);
 }
-.test:hover > div:nth-child(2) {
+.list-img-item:hover > div:nth-child(2) {
   animation: mymove2 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.test > div:nth-child(3) {
+.list-img-item > div:nth-child(3) {
   animation: back3 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   z-index: 998;
 }
-.test:hover > div:nth-child(3) {
+.list-img-item:hover > div:nth-child(3) {
   animation: mymove3 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.test > div:nth-child(4) {
+.list-img-item > div:nth-child(4) {
   animation: back4 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   z-index: 997;
 }
-.test:hover > div:nth-child(4) {
+.list-img-item:hover > div:nth-child(4) {
   animation: mymove4 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.overlay:hover {
-  transition: all 0.2s linear;
-  background-color: black;
-  opacity: 0.3;
-}
 .list-img {
   transition: all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+  position: fixed;
+  border-radius: 10px;
+  z-index: 100;
+  bottom: 40px;
+  height: 70;
+  overflow: hidden;
+  display: flex;
+  cursor: pointer;
+  transition: left 300ms ease;
+  width: 70px;
+}
+.list-img:hover {
+  width: 280px;
+}
+
+.list-img-content {
+  width: 280;
+  height: 70;
+  display: flex;
 }
 
 @keyframes mymove2 {

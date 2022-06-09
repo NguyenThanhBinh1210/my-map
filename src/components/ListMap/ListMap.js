@@ -6,49 +6,19 @@ import { useSelector } from "react-redux";
 import "./list_map.css";
 
 export default function BoxSx({ showDirect }) {
-  const { value } = useSelector((state) => state.more);
-  const [position, setPosition] = React.useState(false);
-  React.useEffect(() => {
-    setPosition(value);
-  }, [value]);
-  const [dataList, setDataList] = React.useState(ImageList);
-  const [enter, setEnter] = React.useState(false);
+  const { value: valueMore } = useSelector((state) => state.more);
 
-  const handleEnter = () => {
-    setEnter(true);
-  };
-  const handleLeave = () => {
-    setEnter(false);
-  };
+  const [dataList, setDataList] = React.useState(ImageList);
 
   return (
     <Box
       className="list-img"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
       sx={{
-        position: "fixed",
-        borderRadius: "10px",
-        zIndex: "100",
-        bottom: "40px",
-        left: position && showDirect ? "430px" : "15px",
-        width: enter ? 280 : 70,
-        height: 70,
-        overflow: "hidden",
-        display: "flex",
-        cursor: "pointer",
-        transition: "left 300ms ease",
+        left: valueMore && showDirect ? "430px" : "15px",
       }}
     >
-      <Box
-        sx={{
-          width: 280,
-          height: 70,
-          backgroundColor: "white",
-          display: "flex",
-        }}
-      >
-        <div className="test" style={{ display: "flex" }}>
+      <Box className="list-img-content">
+        <div className="list-img-item">
           {dataList.map((item, index) => (
             <ItemMap
               key={index}

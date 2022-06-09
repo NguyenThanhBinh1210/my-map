@@ -1,0 +1,8 @@
+.delete-icon {
+  position: absolute;
+  top: 12px;
+  width: 25;
+  height: 25;
+  color: white;
+  display: none;
+}
