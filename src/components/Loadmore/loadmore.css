@@ -1,0 +1,17 @@
+.loadmore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 300ms ease;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  color: rgb(115, 115, 115);
+  padding: 15px 10px 10px;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+.loadmore:hover {
+  background-color: #ccc !important;
+}

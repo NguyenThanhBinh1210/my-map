@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Divider, InputBase, Paper, Stack } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import React from "react";
+import { Divider, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import DirectionsIcon from "@mui/icons-material/Directions";
@@ -8,6 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useDispatch } from "react-redux";
 import { setToggle } from "../../redux/features/toggleSlice";
 import { setSuccess } from "../../redux/features/suggestSlice";
+import "./input.css";
 
 const Input = () => {
   const dispatch = useDispatch();
@@ -18,19 +18,15 @@ const Input = () => {
     dispatch(setToggle(true));
   };
   return (
-    <Paper
-      component="form"
-      sx={{
-        p: "2px 4px",
-        display: "flex",
-        alignItems: "center",
-        width: "97.8%",
-        marginBottom: "5px",
-      }}
-    >
+    <Paper component="form" className="input-container">
       <Tooltip title="Menu">
         <IconButton sx={{ p: "10px" }} aria-label="menu">
-          <MenuIcon />
+          <img
+            src="	https://map.map4d.vn/mapAppRoot/icon/Menu-navigation.svg"
+            alt=""
+            width="24"
+            height="24"
+          />
         </IconButton>
       </Tooltip>
       <InputBase

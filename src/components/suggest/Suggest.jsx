@@ -5,34 +5,14 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import "./suggest.css";
 const Suggest = () => {
   return (
-    <Stack
-      sx={{
-        borderRadius: "5px",
-        border: "1px solid rgb(225, 225, 225)",
-        backgroundColor: "white",
-        padding: "10px 10px 0 10px",
-        paddingBottom: "20px",
-      }}
-    >
-      <Typography
-        align="left"
-        sx={{
-          fontSize: "16px",
-          fontWeight: "500",
-        }}
-      >
+    <Stack className="suggest">
+      <Typography align="left" className="suggest-title">
         Địa điểm gợi ý
       </Typography>
-      <Stack
-        direction="row"
-        sx={{
-          padding: "16px 16px 0 16px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <Stack direction="row" className="suggest-content">
         <Box>
           <CircleIcon color="#5F9500" margin={true} hover>
             <RestaurantIcon
