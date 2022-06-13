@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconButton, Stack, Tooltip } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,26 +9,32 @@ import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { setToggle } from "../../redux/features/toggleSlice";
 import { useDispatch } from "react-redux";
 import { vehicleType } from "../../data";
+import { setMode } from "../../redux/features/modeSlice";
 
-const InstructionHeader = ({ setMode }) => {
-  const [active, setActive] = useState("Lái xe");
+const InstructionHeader = () => {
   const dispatch = useDispatch();
+  const [active, setActive] = useState("Lái xe");
   const handleClose = () => {
     dispatch(setToggle(false));
   };
+  const [modeType, setModeType] = useState("car");
+  useEffect(() => {
+    dispatch(setMode(modeType));
+  }, [modeType]);
+
   const handleSetMode = (type) => {
     setActive(type);
     if (type === "Lái xe") {
-      setMode("car");
+      setModeType("car");
     }
     if (type === "Đi xe máy") {
-      setMode("motorcycle");
+      setModeType("motorcycle");
     }
     if (type === "Đi xe đạp") {
-      setMode("bike");
+      setModeType("bike");
     }
     if (type === "Đi bộ") {
-      setMode("foot");
+      setModeType("foot");
     }
   };
   return (

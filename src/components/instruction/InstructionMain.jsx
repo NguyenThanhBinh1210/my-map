@@ -16,7 +16,8 @@ import { setPolyline } from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
 import { setInput } from "../../redux/features/inputSlice";
 
-const InstructionMain = ({ mode }) => {
+const InstructionMain = () => {
+  const { value: modeValue } = useSelector((state) => state.mode);
   const [listValue, setListValue] = useState([]);
   const [router, setRouter] = useState([]);
   const [start, setStart] = useState("");
@@ -57,8 +58,12 @@ const InstructionMain = ({ mode }) => {
     }
   };
   const handleRouter = () => {
-    dispatch(setPolyline(listPolyline));
+    // dispatch(setPolyline(listPolyline));
   };
+  useEffect(() => {
+    dispatch(setPolyline(listPolyline));
+  }, [router]);
+
   const handleAddInput = () => {
     setShowAdd(false);
     setItems([
@@ -137,7 +142,7 @@ const InstructionMain = ({ mode }) => {
     if (start && end) {
       async function getResults() {
         const results = await axios(
-          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${mode}`
+          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${modeValue}`
         );
         setRouter(results.data);
       }
@@ -180,7 +185,6 @@ const InstructionMain = ({ mode }) => {
                               width: 320,
                               display: "flex",
                             }}
-                            value={locations ? locations[index] : null}
                             onChange={(event, value) =>
                               handleChangeInput(index, value)
                             }
@@ -197,8 +201,7 @@ const InstructionMain = ({ mode }) => {
                                     color: "rgb(80, 143, 244)",
                                   }}
                                 />
-                                {/* {option.label} */}
-                                {option}
+                                {option.label}
                               </Box>
                             )}
                             renderInput={(params) => (
