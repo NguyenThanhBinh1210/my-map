@@ -6,6 +6,7 @@ import SuggestReducer from "./features/suggestSlice";
 import LocationReducer from "./features/locationSlice";
 import PolylineReducer from "./features/polylineSlice";
 import InputReducer from "./features/inputSlice";
+import ModeReducer from "./features/modeSlice";
 
 export default configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export default configureStore({
     location: LocationReducer,
     polyline: PolylineReducer,
     input: InputReducer,
+    mode: ModeReducer,
   },
 });

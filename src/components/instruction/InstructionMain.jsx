@@ -16,31 +16,28 @@ import { setPolyline } from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
 import { setInput } from "../../redux/features/inputSlice";
 
-const InstructionMain = ({ mode }) => {
-  const dispatch = useDispatch();
+const InstructionMain = () => {
+  const { value: modeValue } = useSelector((state) => state.mode);
   const [listValue, setListValue] = useState([]);
-
   const [router, setRouter] = useState([]);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+  const [items, setItems] = useState([]);
+  const [showAdd, setShowAdd] = useState(false);
+  const [height, setHeight] = useState(100);
+  const [active, setActive] = useState("");
+  const dispatch = useDispatch();
+  const { locations } = useSelector((state) => state.location);
   const listSteps = router?.result?.routes[0]?.legs[0]?.steps;
   const listPolyline = listSteps?.map((step) => {
     return [step.startLocation.lng, step.startLocation.lat];
   });
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-  const { locations } = useSelector((state) => state.location);
-
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
     return result;
   };
-  const [items, setItems] = useState([]);
-
-  const [showAdd, setShowAdd] = useState(false);
-  const [height, setHeight] = useState(100);
-  const [active, setActive] = useState("");
-
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -61,21 +58,11 @@ const InstructionMain = ({ mode }) => {
     }
   };
   const handleRouter = () => {
-    dispatch(setPolyline(listPolyline));
+    // dispatch(setPolyline(listPolyline));
   };
-
   useEffect(() => {
-    if (listValue.length !== 0) {
-      if (listValue[0]) {
-        const realStart = listValue[0].split(" ").join("");
-        setStart(realStart);
-      }
-      if (listValue[listValue.length - 1]) {
-        const realEnd = listValue[listValue.length - 1].split(" ").join("");
-        setEnd(realEnd);
-      }
-    }
-  }, [listValue]);
+    dispatch(setPolyline(listPolyline));
+  }, [router]);
 
   const handleAddInput = () => {
     setShowAdd(false);
@@ -129,6 +116,18 @@ const InstructionMain = ({ mode }) => {
     }
   };
   useEffect(() => {
+    if (listValue.length !== 0) {
+      if (listValue[0]) {
+        const realStart = listValue[0].split(" ").join("");
+        setStart(realStart);
+      }
+      if (listValue[listValue.length - 1]) {
+        const realEnd = listValue[listValue.length - 1].split(" ").join("");
+        setEnd(realEnd);
+      }
+    }
+  }, [listValue]);
+  useEffect(() => {
     const someListValue = listValue.some((value) => value === null);
     if (someListValue) {
       setShowAdd(false);
@@ -143,7 +142,7 @@ const InstructionMain = ({ mode }) => {
     if (start && end) {
       async function getResults() {
         const results = await axios(
-          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${mode}`
+          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${modeValue}`
         );
         setRouter(results.data);
       }

@@ -16,10 +16,10 @@ function App() {
   const { value: valueMap } = useSelector((state) => state.map);
   const { value: valuePolyline } = useSelector((state) => state.polyline);
   const { value: valueToggle } = useSelector((state) => state.toggle);
+  const { value: valueMode } = useSelector((state) => state.mode);
   const [showDirect, setShowDirect] = useState(true);
   const [listLocation, setListLocation] = useState([]);
   const dispatch = useDispatch();
-
   const getMap = () => {
     let options = {
       center: { lat: 16.072163491469226, lng: 108.22690536081757 },
@@ -27,12 +27,14 @@ function App() {
       controls: true,
       mapType: "roadmap",
     };
+
     const map = new map4d.Map(document.getElementById("map"), options);
     dispatch(setMap(map));
     getMarker(map, setListLocation, uuidv4);
   };
-
-  getPolyline(valuePolyline, valueMap, inputValue);
+  useEffect(() => {
+    getPolyline(valuePolyline, valueMap, inputValue);
+  }, [valueMode, inputValue, valuePolyline]);
 
   useEffect(() => {
     getMap();
