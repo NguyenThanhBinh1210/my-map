@@ -40,10 +40,7 @@ const InstructionHeader = () => {
   return (
     <Stack
       direction="row"
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-      }}
+      sx={{ display: "flex", justifyContent: "space-between" }}
     >
       <div>
         <Tooltip title="Menu">
@@ -53,13 +50,7 @@ const InstructionHeader = () => {
         </Tooltip>
       </div>
       <div style={{ alignItems: "center", display: "flex" }}>
-        <Stack
-          direction="row"
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
+        <Stack direction="row" sx={{ alignItems: "center", display: "flex" }}>
           {vehicleType.map((item) => (
             <Tooltip key={item.id} title={item.name}>
               <IconButton

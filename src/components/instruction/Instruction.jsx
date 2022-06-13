@@ -9,16 +9,9 @@ const Instruction = ({ showDirect }) => {
     <>
       <Stack
         className="instruction"
-        sx={{
-          transform: showDirect ? "" : "translateX(-100%)",
-        }}
+        sx={{ transform: showDirect ? "" : "translateX(-100%)" }}
       >
-        <Stack
-          p={1}
-          sx={{
-            backgroundColor: "rgb(80, 143, 244)",
-          }}
-        >
+        <Stack p={1} sx={{ backgroundColor: "rgb(80, 143, 244)" }}>
           <InstructionHeader></InstructionHeader>
           <InstructionMain></InstructionMain>
         </Stack>
