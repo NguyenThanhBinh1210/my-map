@@ -16,7 +16,6 @@ function App() {
   const { value: valueMap } = useSelector((state) => state.map);
   const { value: valuePolyline } = useSelector((state) => state.polyline);
   const { value: valueToggle } = useSelector((state) => state.toggle);
-  const { value: valueMode } = useSelector((state) => state.mode);
   const [showDirect, setShowDirect] = useState(true);
   const [listLocation, setListLocation] = useState([]);
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ function App() {
   };
   useEffect(() => {
     getPolyline(valuePolyline, valueMap, inputValue);
-  }, [valueMode, inputValue, valuePolyline]);
+  }, [inputValue, valuePolyline]);
 
   useEffect(() => {
     getMap();

@@ -5,33 +5,34 @@ import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
-import { Box, Tooltip, Typography } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CloseIcon from "@mui/icons-material/Close";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-import ListIconRender from "./ListIconRender";
+import ListIconRender from "./Main/ListIconRender";
 import { initialData } from "../../data";
 import { useSelector } from "react-redux";
 import { setPolyline } from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
 import { setInput } from "../../redux/features/inputSlice";
+import MainSelected from "./Main/MainSelected";
+import MainAddInput from "./Main/MainAddInput";
 
 const InstructionMain = () => {
-  const { value: modeValue } = useSelector((state) => state.mode);
   const [listValue, setListValue] = useState([]);
   const [router, setRouter] = useState([]);
+  const [weighting, setWeighting] = useState(1);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
+  const [points, setPoints] = useState("");
   const [items, setItems] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const [height, setHeight] = useState(100);
   const [active, setActive] = useState("");
   const dispatch = useDispatch();
+  const { value: modeValue } = useSelector((state) => state.mode);
   const { locations } = useSelector((state) => state.location);
-  const listSteps = router?.result?.routes[0]?.legs[0]?.steps;
-  const listPolyline = listSteps?.map((step) => {
-    return [step.startLocation.lng, step.startLocation.lat];
-  });
+  const listRouter = router?.result?.routes;
+
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -57,12 +58,6 @@ const InstructionMain = () => {
       setItems(reorderedItems);
     }
   };
-  const handleRouter = () => {
-    // dispatch(setPolyline(listPolyline));
-  };
-  useEffect(() => {
-    dispatch(setPolyline(listPolyline));
-  }, [router]);
 
   const handleAddInput = () => {
     setShowAdd(false);
@@ -115,18 +110,44 @@ const InstructionMain = () => {
       setListValue(newValue);
     }
   };
+
+  /* Lấy dữ liệu lng, lat trả về từ API */
+  useEffect(() => {
+    if (listRouter) {
+      const listSteps = listRouter[0]?.legs[0]?.steps;
+      const listPolyline = listSteps?.map((step) => {
+        return [step.startLocation.lng, step.startLocation.lat];
+      });
+      dispatch(setPolyline(listPolyline));
+    }
+    if (router?.result?.routes.length > 1) {
+      console.log("nammo");
+    }
+  }, [router]);
+
+  /* Tạo diểm đầu và điểm cuối cho Router */
   useEffect(() => {
     if (listValue.length !== 0) {
       if (listValue[0]) {
         const realStart = listValue[0].split(" ").join("");
         setStart(realStart);
-      }
-      if (listValue[listValue.length - 1]) {
-        const realEnd = listValue[listValue.length - 1].split(" ").join("");
-        setEnd(realEnd);
+        if (listValue[listValue.length - 1]) {
+          const realEnd = listValue[listValue.length - 1].split(" ").join("");
+          setEnd(realEnd);
+          if (listValue.length > 2) {
+            const listOther = listValue.slice(1, listValue.length - 1);
+            const splitOther = listOther.map((item) =>
+              item.split(" ").join("")
+            );
+            const realOther = splitOther.join(";");
+            // setPoints(realOther);
+          }
+        }
       }
     }
   }, [listValue]);
+
+  /* Giới hạn add thêm input */
   useEffect(() => {
     const someListValue = listValue.some((value) => value === null);
     if (someListValue) {
@@ -134,21 +155,25 @@ const InstructionMain = () => {
     }
     dispatch(setInput(listValue));
   }, [listValue]);
+
+  /* Render list input lần đầu */
   useEffect(() => {
     initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
     setItems(initialData);
   }, []);
+
+  /* Kết nối API Router */
   useEffect(() => {
-    if (start && end) {
+    if (start || end) {
       async function getResults() {
         const results = await axios(
-          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&mode=${modeValue}`
+          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&points=${points}&mode=${modeValue}&weighting=${weighting}`
         );
         setRouter(results.data);
       }
       getResults();
     }
-  }, [start, end]);
+  }, [start, end, modeValue, weighting, points]);
   return (
     <>
       <div className="main_content">
@@ -241,39 +266,9 @@ const InstructionMain = () => {
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>
       {showAdd && items.length < 6 ? (
-        <Stack className="stack-add-input" onClick={handleAddInput}>
-          <AddLocationAltIcon
-            sx={{
-              marginRight: "5px",
-              color: "white",
-              fontSize: "20px",
-            }}
-          />
-          <Typography variant="subtext1" sx={{ color: "white" }}>
-            Thêm điểm đến
-          </Typography>
-        </Stack>
+        <MainAddInput handleAddInput={handleAddInput}></MainAddInput>
       ) : null}
-      <Stack className="stack-wrapper-search" direction="row">
-        <Box className="box-wrapper-button" variant="contained">
-          <button className="button-search" onClick={handleRouter}>
-            Tìm kiếm
-          </button>
-        </Box>
-        <select
-          defaultValue="Cân bằng"
-          id="selection"
-          style={{
-            flex: "1",
-            outline: "none",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="volvo">Ngắn nhất</option>
-          <option value="saab">Nhanh nhất</option>
-          <option value="vw">Cân bằng</option>
-        </select>
-      </Stack>
+      <MainSelected setWeighting={setWeighting}></MainSelected>
     </>
   );
 };
