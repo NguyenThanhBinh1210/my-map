@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { setInput } from "../../redux/features/inputSlice";
 import MainSelected from "./Main/MainSelected";
 import MainAddInput from "./Main/MainAddInput";
+import DeleteIcon from "../DeleteIcon/DeleteIcon";
 
 const InstructionMain = () => {
   const [listValue, setListValue] = useState([]);
@@ -240,20 +241,14 @@ const InstructionMain = () => {
                               />
                             )}
                           />
-                          <Tooltip title="Xóa địa điểm này" placement="right">
-                            <button
-                              className="button-delete-location"
-                              onClick={() => handleDeleteLocation(index)}
-                              style={{
-                                display:
-                                  item.id === active && items.length > 2
-                                    ? "flex"
-                                    : "none",
-                              }}
-                            >
-                              <CloseIcon sx={{ color: "white" }}></CloseIcon>
-                            </button>
-                          </Tooltip>
+                          <DeleteIcon
+                            title="Xóa địa điểm này"
+                            handleDeleteLocation={handleDeleteLocation}
+                            index={index}
+                            item={item}
+                            active={active}
+                            items={items}
+                          />
                         </Stack>
                       </div>
                     )}

@@ -40,6 +40,7 @@ const Direct = ({ showDirect, setShowDirect }) => {
       sx={{
         backgroundColor: moreValue ? "white" : "",
         height: moreValue ? "100vh" : "",
+        boxShadow: moreValue ? "rgba(0, 0, 0, 0.16) 0px 1px 4px" : "",
         transform: showDirect ? "" : "translateX(-100%)",
       }}
     >

@@ -1,6 +1,6 @@
 .suggest {
   border-radius: 5px;
-  border: 1px solid rgb(225, 225, 225);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 3px;
   background-color: white;
   padding: 10px 10px 0 10px;
   padding-bottom: 20px;
@@ -15,4 +15,12 @@
   padding: 16px 16px 0 16px;
   display: flex;
   justify-content: space-between;
+}
+
+.suggest-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
 }
