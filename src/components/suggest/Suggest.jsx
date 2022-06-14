@@ -13,7 +13,7 @@ const Suggest = () => {
         Địa điểm gợi ý
       </Typography>
       <Stack direction="row" className="suggest-content">
-        <Box>
+        <Box className="suggest-center">
           <CircleIcon color="#5F9500" margin={true} hover>
             <RestaurantIcon
               sx={{
@@ -31,7 +31,7 @@ const Suggest = () => {
             Nhà hàng
           </Typography>
         </Box>
-        <Box>
+        <Box className="suggest-center">
           <CircleIcon margin={true} hover>
             <img
               src="https://map.map4d.vn/mapAppRoot/icon/suggestPlaceIcon/ATM.svg"
@@ -50,7 +50,7 @@ const Suggest = () => {
             ATM
           </Typography>
         </Box>
-        <Box>
+        <Box className="suggest-center">
           <CircleIcon color="#CB4500" margin={true} hover>
             <CoffeeIcon
               sx={{
@@ -68,7 +68,7 @@ const Suggest = () => {
             Cà phê
           </Typography>
         </Box>
-        <Box>
+        <Box className="suggest-center">
           <CircleIcon color="#E39F00" margin={true} hover>
             <LocalParkingIcon
               sx={{
@@ -86,7 +86,7 @@ const Suggest = () => {
             Bãi đậu xe
           </Typography>
         </Box>
-        <Box>
+        <Box className="suggest-center">
           <CircleIcon color="#5C6E8A" margin={true} hover>
             <MoreHorizIcon
               sx={{

@@ -14,7 +14,7 @@ export default function BoxSx({ showDirect }) {
     <Box
       className="list-img"
       sx={{
-        left: valueMore && showDirect ? "430px" : "15px",
+        left: valueMore && showDirect ? "420px" : "15px",
       }}
     >
       <Box className="list-img-content">

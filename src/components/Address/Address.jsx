@@ -6,11 +6,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import { Stack, Typography } from "@mui/material";
 import CircleIcon from "../CircleIcon/CircleIcon";
 const style = {
-  width: "99.5%",
   bgcolor: "background.paper",
   borderRadius: "5px",
   padding: 0,
-  border: "1px solid rgb(225, 225, 225)",
+  boxShadow: "rgba(0, 0, 0, 0.2) 0px 0px 3px",
   marginBottom: "5px",
 };
 
