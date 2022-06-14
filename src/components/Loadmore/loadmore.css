@@ -10,6 +10,7 @@
   cursor: pointer;
   margin-top: auto;
   background-color: #fff;
+  margin-bottom: 10px;
 }
 .loadmore:hover {
   background-color: #ccc !important;

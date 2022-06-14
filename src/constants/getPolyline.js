@@ -5,10 +5,7 @@ export const getPolyline = (valuePolyline, value, inputValue) => {
     strokeOpacity: 0.9,
     strokeWidth: 8,
   });
-  // const inputValueDefault = [...inputValue];
-  // const everyInputValue =
-  //   inputValue.length === inputValueDefault.length &&
-  //   inputValue.every((value, index) => value === inputValueDefault[index]);
+
   const someInputValue = inputValue.some((value) => value === null);
   if (someInputValue) {
     polyline.setMap(null);
