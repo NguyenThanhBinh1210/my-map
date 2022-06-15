@@ -26,12 +26,11 @@ const MainSelected = ({ setWeighting }) => {
       <select
         onChange={handleSelect}
         id="selection"
+        defaultValue="1"
         style={{ flex: "1", outline: "none", border: "1px solid #ccc" }}
       >
         <option value="0">Ngắn nhất</option>
-        <option value="1" selected>
-          Nhanh nhất
-        </option>
+        <option value="1">Nhanh nhất</option>
         <option value="2">Cân bằng</option>
       </select>
     </Stack>

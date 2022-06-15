@@ -17,8 +17,17 @@ const Instruction = ({ showDirect }) => {
   const { value: valuePolyline } = useSelector((state) => state.polyline);
   const [listLocation, setListLocation] = useState([]);
 
+  const [polylineGlobal, setPolylineGlobal] = useState();
+
   useEffect(() => {
-    getPolyline(valuePolyline, valueMap, inputValue);
+    let polyline = new map4d.Polyline({
+      path: inputValue.length > 1 ? valuePolyline : [],
+      strokeColor: "#508ff4",
+      strokeOpacity: 0.9,
+      strokeWidth: 8,
+    });
+    setPolylineGlobal(polyline);
+    getPolyline(polylineGlobal, polyline, valueMap, inputValue);
   }, [inputValue, valuePolyline]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import MapReducer from "./features/mapSlice";
 import MoreReducer from "./features/moreSlice";
 import ToggleReducer from "./features/toggleSlice";
@@ -19,4 +19,6 @@ export default configureStore({
     input: InputReducer,
     mode: ModeReducer,
   },
+  devTool: process.env.NODE_ENV === "development",
+  middleware: [...getDefaultMiddleware({ serializableCheck: false })],
 });

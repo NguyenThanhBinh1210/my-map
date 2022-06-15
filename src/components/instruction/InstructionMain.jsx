@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import Stack from "@mui/material/Stack";
-import { Box, Tooltip } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CloseIcon from "@mui/icons-material/Close";
 import ListIconRender from "./Main/ListIconRender";
-import { initialData } from "../../data";
 import { useSelector } from "react-redux";
 import { setPolyline } from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
-import { setInput } from "../../redux/features/inputSlice";
 import MainSelected from "./Main/MainSelected";
 import MainAddInput from "./Main/MainAddInput";
-import DeleteIcon from "../DeleteIcon/DeleteIcon";
+import MainDragDrop from "./Main/MainDragDrop";
 
 const InstructionMain = () => {
   const [listValue, setListValue] = useState([]);
@@ -28,37 +19,9 @@ const InstructionMain = () => {
   const [items, setItems] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const [height, setHeight] = useState(100);
-  const [active, setActive] = useState("");
   const dispatch = useDispatch();
   const { value: modeValue } = useSelector((state) => state.mode);
-  const { locations } = useSelector((state) => state.location);
   const listRouter = router?.result?.routes;
-
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  };
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-    const reorderedItems = reorder(
-      items,
-      result.source.index,
-      result.destination.index
-    );
-    const reorderedList = reorder(
-      listValue,
-      result.source.index,
-      result.destination.index
-    );
-    if (listValue.length !== 0) {
-      setListValue(reorderedList);
-      setItems(reorderedItems);
-    }
-  };
 
   const handleAddInput = () => {
     setShowAdd(false);
@@ -71,32 +34,7 @@ const InstructionMain = () => {
     ]);
     setHeight(height + 50);
   };
-  const handleChangeInput = (index, value) => {
-    if (value === null) {
-      const lastListValue = [...listValue];
-      lastListValue.splice(index, 1, null);
-      setListValue(lastListValue);
-    }
-    if (value) {
-      const newList = [...listValue];
-      newList.splice(index, 1, value.label);
-      setListValue(newList);
-    }
 
-    if (listValue.length > 0) {
-      setShowAdd(true);
-    }
-  };
-  const handleDeleteLocation = (index) => {
-    const newItems = [...items];
-    const newList = [...listValue];
-    newItems.splice(index, 1);
-    newList.splice(index, 1);
-    setItems(newItems);
-    setListValue(newList);
-    setHeight(height - 50);
-    setActive("");
-  };
   const handleSwap = () => {
     if (listValue.length === 2 && listValue.every((item) => item !== null)) {
       const newItems = [...items];
@@ -135,33 +73,10 @@ const InstructionMain = () => {
         if (listValue[listValue.length - 1]) {
           const realEnd = listValue[listValue.length - 1].split(" ").join("");
           setEnd(realEnd);
-          if (listValue.length > 2) {
-            const listOther = listValue.slice(1, listValue.length - 1);
-            const splitOther = listOther.map((item) =>
-              item.split(" ").join("")
-            );
-            const realOther = splitOther.join(";");
-            // setPoints(realOther);
-          }
         }
       }
     }
   }, [listValue]);
-
-  /* Giới hạn add thêm input */
-  useEffect(() => {
-    const someListValue = listValue.some((value) => value === null);
-    if (someListValue) {
-      setShowAdd(false);
-    }
-    dispatch(setInput(listValue));
-  }, [listValue]);
-
-  /* Render list input lần đầu */
-  useEffect(() => {
-    initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
-    setItems(initialData);
-  }, []);
 
   /* Kết nối API Router */
   useEffect(() => {
@@ -178,86 +93,15 @@ const InstructionMain = () => {
   return (
     <>
       <div className="main_content">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="nammoadidaphat"
-                style={{
-                  height: `${height}px`,
-                }}
-              >
-                {items.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        className="card"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <Stack
-                          className="stack-mouse"
-                          direction="row"
-                          spacing={1}
-                          onMouseEnter={() => setActive(item.id)}
-                          onMouseLeave={() => setActive("")}
-                        >
-                          <Autocomplete
-                            className="autocomplete-css"
-                            sx={{
-                              width: 320,
-                              display: "flex",
-                            }}
-                            onChange={(event, value) =>
-                              handleChangeInput(index, value)
-                            }
-                            isOptionEqualToValue={(option, value) =>
-                              option.id === value.id
-                            }
-                            id="open-on-focus"
-                            options={locations}
-                            renderOption={(props, option) => (
-                              <Box component="li" {...props}>
-                                <LocationOnIcon
-                                  sx={{
-                                    marginRight: "10px",
-                                    color: "rgb(80, 143, 244)",
-                                  }}
-                                />
-                                {option.label}
-                              </Box>
-                            )}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                placeholder={item.content}
-                                variant="standard"
-                                sx={{
-                                  color: "white",
-                                }}
-                              />
-                            )}
-                          />
-                          <DeleteIcon
-                            title="Xóa địa điểm này"
-                            handleDeleteLocation={handleDeleteLocation}
-                            index={index}
-                            item={item}
-                            active={active}
-                            items={items}
-                          />
-                        </Stack>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <MainDragDrop
+          height={height}
+          setHeight={setHeight}
+          items={items}
+          setShowAdd={setShowAdd}
+          listValue={listValue}
+          setListValue={setListValue}
+          setItems={setItems}
+        ></MainDragDrop>
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>
       {showAdd && items.length < 6 ? (
