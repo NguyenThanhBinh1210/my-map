@@ -1,4 +1,4 @@
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -20,10 +20,6 @@ img,
 picture,
 video,
 canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
 input,
 button,
 textarea,
@@ -39,4 +35,4 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
-}
+} */
