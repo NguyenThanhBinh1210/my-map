@@ -51,6 +51,8 @@
 /* AUTOCOMPLETE */
 .autocomplete-css {
   padding: 8px 0;
+  width: 320px;
+  display: flex;
 }
 .autocomplete-css > div > label {
   color: white;

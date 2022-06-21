@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import CircleIcon from "../CircleIcon/CircleIcon";
+import CircleIcon from "../circleIcon/CircleIcon";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
@@ -15,19 +15,9 @@ const Suggest = () => {
       <Stack direction="row" className="suggest-content">
         <Box className="suggest-center">
           <CircleIcon color="#5F9500" margin={true} hover>
-            <RestaurantIcon
-              sx={{
-                color: "white",
-              }}
-            />
+            <RestaurantIcon sx={{ color: "white" }} />
           </CircleIcon>
-          <Typography
-            align="center"
-            variant="caption"
-            sx={{
-              width: "100%",
-            }}
-          >
+          <Typography align="center" variant="caption" sx={{ width: "100%" }}>
             Nhà hàng
           </Typography>
         </Box>

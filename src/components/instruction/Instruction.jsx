@@ -12,13 +12,17 @@ import { useDispatch } from "react-redux";
 
 const Instruction = ({ showDirect }) => {
   const dispatch = useDispatch();
+  const [listValue, setListValue] = useState([]);
   const { value: inputValue } = useSelector((state) => state.input);
   const { value: valueMap } = useSelector((state) => state.map);
   const { value: valuePolyline } = useSelector((state) => state.polyline);
   const [listLocation, setListLocation] = useState([]);
-
+  const [showAdd, setShowAdd] = useState(false);
   const [polylineGlobal, setPolylineGlobal] = useState();
+  const [values, setValues] = useState([]);
+  // console.log(values);
 
+  /* Vẽ polyline */
   useEffect(() => {
     let polyline = new map4d.Polyline({
       path: inputValue.length > 1 ? valuePolyline : [],
@@ -27,12 +31,21 @@ const Instruction = ({ showDirect }) => {
       strokeWidth: 8,
     });
     setPolylineGlobal(polyline);
-    getPolyline(polylineGlobal, polyline, valueMap, inputValue);
-  }, [inputValue, valuePolyline]);
+    getPolyline(polylineGlobal, polyline, valueMap, values, listValue);
+  }, [values, valuePolyline]);
 
+  /* Vẽ marker */
   useEffect(() => {
-    getMarker(valueMap, setListLocation, uuidv4);
-  }, []);
+    getMarker(valueMap, setListLocation, uuidv4, setValues, values);
+  }, [values]);
+
+  /* @@ */
+  useEffect(() => {
+    if (values.length >= 2) {
+      const realValue = values.map((item) => item?.label);
+      setListValue(realValue);
+    }
+  }, [values]);
 
   useEffect(() => {
     dispatch(setLocations(listLocation));
@@ -46,7 +59,14 @@ const Instruction = ({ showDirect }) => {
       >
         <Stack p={1} sx={{ backgroundColor: "rgb(80, 143, 244)" }}>
           <InstructionHeader></InstructionHeader>
-          <InstructionMain></InstructionMain>
+          <InstructionMain
+            values={values}
+            setValues={setValues}
+            listValue={listValue}
+            setListValue={setListValue}
+            setShowAdd={setShowAdd}
+            showAdd={showAdd}
+          ></InstructionMain>
         </Stack>
       </Stack>
     </>

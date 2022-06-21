@@ -16,6 +16,8 @@ const MainDragDrop = ({
   setShowAdd,
   listValue,
   setListValue,
+  values,
+  setValues,
 }) => {
   const { locations } = useSelector((state) => state.location);
   const [active, setActive] = useState("");
@@ -51,10 +53,13 @@ const MainDragDrop = ({
   const handleDeleteLocation = (index) => {
     const newItems = [...items];
     const newList = [...listValue];
+    const newValues = [...values];
     newItems.splice(index, 1);
     newList.splice(index, 1);
+    newValues.splice(index, 1);
     setItems(newItems);
     setListValue(newList);
+    setValues(newValues);
     setHeight(height - 50);
     setActive("");
   };
@@ -65,16 +70,22 @@ const MainDragDrop = ({
       const lastListValue = [...listValue];
       lastListValue.splice(index, 1, null);
       setListValue(lastListValue);
+      const lastListValue2 = [...values];
+      lastListValue2.splice(index, 1, null);
+      setValues(lastListValue2);
     }
     if (value) {
       const newList = [...listValue];
       newList.splice(index, 1, value.label);
       setListValue(newList);
+      const newList2 = [...values];
+      newList2.splice(index, 1, { id: index + 1, label: value.label });
+      setValues(newList2);
     }
 
-    if (listValue.length > 0) {
-      setShowAdd(true);
-    }
+    // if (listValue.length > 0) {
+    //   setShowAdd(true);
+    // }
   };
 
   /* Render list input lần đầu */
@@ -85,12 +96,15 @@ const MainDragDrop = ({
 
   /* Giới hạn add thêm input */
   useEffect(() => {
-    const someListValue = listValue.some((value) => value === null);
+    const someListValue = values.some((value) => value === null);
     if (someListValue) {
       setShowAdd(false);
     }
     dispatch(setInput(listValue));
-  }, [listValue]);
+    if (values.length >= 2) {
+      setShowAdd(true);
+    }
+  }, [listValue, values]);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable">
@@ -121,18 +135,15 @@ const MainDragDrop = ({
                     >
                       <Autocomplete
                         className="autocomplete-css"
-                        sx={{
-                          width: 320,
-                          display: "flex",
+                        value={values[index]?.label || null}
+                        onChange={(event, value) => {
+                          handleChangeInput(index, value);
                         }}
-                        onChange={(event, value) =>
-                          handleChangeInput(index, value)
-                        }
-                        isOptionEqualToValue={(option, value) =>
-                          option.id === value.id
-                        }
-                        id="open-on-focus"
                         options={locations}
+                        isOptionEqualToValue={(option, value) =>
+                          option !== value
+                        }
+                        // getOptionLabel={(option) => option}
                         renderOption={(props, option) => (
                           <Box component="li" {...props}>
                             <LocationOnIcon

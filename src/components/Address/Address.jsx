@@ -4,7 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import HomeIcon from "@mui/icons-material/Home";
 import { Stack, Typography } from "@mui/material";
-import CircleIcon from "../CircleIcon/CircleIcon";
+import CircleIcon from "../circleIcon/CircleIcon";
 const style = {
   bgcolor: "background.paper",
   borderRadius: "5px",
