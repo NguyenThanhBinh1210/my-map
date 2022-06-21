@@ -8,9 +8,29 @@ import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { setToggle } from "../../redux/features/toggleSlice";
 import { useDispatch } from "react-redux";
-import { vehicleType } from "../../data";
 import { setMode } from "../../redux/features/modeSlice";
-
+const vehicleType = [
+  {
+    id: 1,
+    name: "Lái xe",
+    icon: DirectionsCarIcon,
+  },
+  {
+    id: 2,
+    name: "Đi xe máy",
+    icon: DirectionsBikeIcon,
+  },
+  {
+    id: 3,
+    name: "Đi xe đạp",
+    icon: TwoWheelerIcon,
+  },
+  {
+    id: 4,
+    name: "Đi bộ",
+    icon: DirectionsWalkIcon,
+  },
+];
 const InstructionHeader = () => {
   const dispatch = useDispatch();
   const [active, setActive] = useState("Lái xe");
@@ -51,54 +71,31 @@ const InstructionHeader = () => {
       </div>
       <div style={{ alignItems: "center", display: "flex" }}>
         <Stack direction="row" sx={{ alignItems: "center", display: "flex" }}>
-          {vehicleType.map((item) => (
-            <Tooltip key={item.id} title={item.name}>
-              <IconButton
-                className="icon-button-type"
-                sx={{
-                  borderRadius: "20px",
-                  backgroundColor: item.name === active ? "white" : "",
-                  ":hover": {
+          {vehicleType.map((item) => {
+            const IconVehicle = item.icon;
+            return (
+              <Tooltip key={item.id} title={item.name}>
+                <IconButton
+                  className="icon-button-type"
+                  sx={{
+                    borderRadius: "20px",
                     backgroundColor: item.name === active ? "white" : "",
-                  },
-                }}
-                onClick={() => handleSetMode(item.name)}
-              >
-                {item.name === "Lái xe" && (
-                  <DirectionsCarIcon
+                    ":hover": {
+                      backgroundColor: item.name === active ? "white" : "",
+                    },
+                  }}
+                  onClick={() => handleSetMode(item.name)}
+                >
+                  <IconVehicle
                     sx={{
                       color:
                         item.name === active ? "rgb(80, 143, 244)" : "white",
                     }}
                   />
-                )}
-                {item.name === "Đi xe máy" && (
-                  <TwoWheelerIcon
-                    sx={{
-                      color:
-                        item.name === active ? "rgb(80, 143, 244)" : "white",
-                    }}
-                  />
-                )}
-                {item.name === "Đi xe đạp" && (
-                  <DirectionsBikeIcon
-                    sx={{
-                      color:
-                        item.name === active ? "rgb(80, 143, 244)" : "white",
-                    }}
-                  />
-                )}
-                {item.name === "Đi bộ" && (
-                  <DirectionsWalkIcon
-                    sx={{
-                      color:
-                        item.name === active ? "rgb(80, 143, 244)" : "white",
-                    }}
-                  />
-                )}
-              </IconButton>
-            </Tooltip>
-          ))}
+                </IconButton>
+              </Tooltip>
+            );
+          })}
         </Stack>
       </div>
       <div>

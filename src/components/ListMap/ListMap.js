@@ -7,15 +7,12 @@ import "./list_map.css";
 
 export default function BoxSx({ showDirect }) {
   const { value: valueMore } = useSelector((state) => state.more);
-
   const [dataList, setDataList] = React.useState(ImageList);
 
   return (
     <Box
       className="list-img"
-      sx={{
-        left: valueMore && showDirect ? "430px" : "15px",
-      }}
+      sx={{ left: valueMore && showDirect ? "430px" : "15px" }}
     >
       <Box className="list-img-content">
         <div className="list-img-item">

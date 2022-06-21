@@ -9,20 +9,26 @@ import MainSelected from "./Main/MainSelected";
 import MainAddInput from "./Main/MainAddInput";
 import MainDragDrop from "./Main/MainDragDrop";
 
-const InstructionMain = () => {
-  const [listValue, setListValue] = useState([]);
+const InstructionMain = ({
+  values,
+  setValues,
+  listValue,
+  setListValue,
+  showAdd,
+  setShowAdd,
+}) => {
   const [router, setRouter] = useState([]);
   const [weighting, setWeighting] = useState(1);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [points, setPoints] = useState("");
   const [items, setItems] = useState([]);
-  const [showAdd, setShowAdd] = useState(false);
   const [height, setHeight] = useState(100);
   const dispatch = useDispatch();
   const { value: modeValue } = useSelector((state) => state.mode);
   const listRouter = router?.result?.routes;
 
+  /* Thêm 1 ô input */
   const handleAddInput = () => {
     setShowAdd(false);
     setItems([
@@ -35,14 +41,15 @@ const InstructionMain = () => {
     setHeight(height + 50);
   };
 
+  /* Đổi vị trí */
   const handleSwap = () => {
     if (listValue.length === 2 && listValue.every((item) => item !== null)) {
       const newItems = [...items];
       const newValue = [...listValue];
-      const tmp1 = newItems[0];
+      var tmp1 = newItems[0];
       newItems[0] = newItems[1];
       newItems[1] = tmp1;
-      const tmp2 = newValue[0];
+      var tmp2 = newValue[0];
       newValue[0] = newValue[1];
       newValue[1] = tmp2;
       setItems(newItems);
@@ -60,20 +67,33 @@ const InstructionMain = () => {
       dispatch(setPolyline(listPolyline));
     }
     if (router?.result?.routes.length > 1) {
-      console.log("nammo");
+      console.log("Có nhiều hơn 1 cách đi");
     }
   }, [router]);
 
-  /* Tạo diểm đầu và điểm cuối cho Router */
+  /* Tạo diểm đầu, điểm cuối và giữa cho Router */
   useEffect(() => {
     if (listValue.length !== 0) {
       if (listValue[0]) {
-        const realStart = listValue[0].split(" ").join("");
+        const realStart = listValue[0];
         setStart(realStart);
         if (listValue[listValue.length - 1]) {
-          const realEnd = listValue[listValue.length - 1].split(" ").join("");
+          const realEnd = listValue[listValue.length - 1];
           setEnd(realEnd);
         }
+      }
+      if (listValue.length > 3) {
+        const other = listValue
+          .slice(1, listValue.length - 1)
+          .join(";")
+          .replace(/\s/g, "");
+        // setPoints(other);
+        console.log(other);
+      }
+      if (listValue.length === 3) {
+        const other = listValue.slice(1, listValue.length - 1).join("");
+        // setPoints(other);
+        console.log(other);
       }
     }
   }, [listValue]);
@@ -101,6 +121,8 @@ const InstructionMain = () => {
           listValue={listValue}
           setListValue={setListValue}
           setItems={setItems}
+          values={values}
+          setValues={setValues}
         ></MainDragDrop>
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>
