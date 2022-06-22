@@ -22,7 +22,6 @@ const MainDragDrop = ({
   const { locations } = useSelector((state) => state.location);
   const [active, setActive] = useState("");
   const dispatch = useDispatch();
-
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -62,30 +61,22 @@ const MainDragDrop = ({
     setValues(newValues);
     setHeight(height - 50);
     setActive("");
+    setShowAdd(true);
   };
 
   /* Thay đổi input và list value */
   const handleChangeInput = (index, value) => {
     if (value === null) {
-      const lastListValue = [...listValue];
-      lastListValue.splice(index, 1, null);
-      setListValue(lastListValue);
       const lastListValue2 = [...values];
       lastListValue2.splice(index, 1, null);
       setValues(lastListValue2);
+      setShowAdd(false);
     }
     if (value) {
-      const newList = [...listValue];
-      newList.splice(index, 1, value.label);
-      setListValue(newList);
       const newList2 = [...values];
       newList2.splice(index, 1, { id: index + 1, label: value.label });
       setValues(newList2);
     }
-
-    // if (listValue.length > 0) {
-    //   setShowAdd(true);
-    // }
   };
 
   /* Render list input lần đầu */
@@ -96,12 +87,11 @@ const MainDragDrop = ({
 
   /* Giới hạn add thêm input */
   useEffect(() => {
-    const someListValue = values.some((value) => value === null);
-    if (someListValue) {
+    if (values.some((value) => value === null)) {
       setShowAdd(false);
     }
     dispatch(setInput(listValue));
-    if (values.length >= 2) {
+    if (values.length >= 2 && !values.some((item) => item === null)) {
       setShowAdd(true);
     }
   }, [listValue, values]);
@@ -143,7 +133,6 @@ const MainDragDrop = ({
                         isOptionEqualToValue={(option, value) =>
                           option !== value
                         }
-                        // getOptionLabel={(option) => option}
                         renderOption={(props, option) => (
                           <Box component="li" {...props}>
                             <LocationOnIcon

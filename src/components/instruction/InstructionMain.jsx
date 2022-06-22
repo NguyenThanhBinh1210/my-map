@@ -16,21 +16,34 @@ const InstructionMain = ({
   setListValue,
   showAdd,
   setShowAdd,
+  listMarker,
+  setListMarker,
 }) => {
   const [router, setRouter] = useState([]);
   const [weighting, setWeighting] = useState(1);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [points, setPoints] = useState("");
-  const [items, setItems] = useState([]);
-  const [height, setHeight] = useState(100);
   const dispatch = useDispatch();
   const { value: modeValue } = useSelector((state) => state.mode);
   const listRouter = router?.result?.routes;
+  const [items, setItems] = useState([]);
+  const [height, setHeight] = useState(100);
+  const [locationText, setLocationText] = useState([]);
+  const [locationLatLng, setLocationLatLng] = useState([]);
+
+  /* Lấy 1 mảng các toạ độ */
+  useEffect(() => {
+    //
+    if (!values.some((item) => item === null)) {
+      values?.map((valueItem) => {
+        setLocationLatLng([...locationLatLng, valueItem?.label]);
+      });
+    }
+  }, [values]);
 
   /* Thêm 1 ô input */
   const handleAddInput = () => {
-    setShowAdd(false);
     setItems([
       ...items,
       {
@@ -39,8 +52,8 @@ const InstructionMain = ({
       },
     ]);
     setHeight(height + 50);
+    setShowAdd(false);
   };
-
   /* Đổi vị trí */
   const handleSwap = () => {
     if (listValue.length === 2 && listValue.every((item) => item !== null)) {
@@ -60,13 +73,25 @@ const InstructionMain = ({
   /* Lấy dữ liệu lng, lat trả về từ API */
   useEffect(() => {
     if (listRouter) {
-      const listSteps = listRouter[0]?.legs[0]?.steps;
-      const listPolyline = listSteps?.map((step) => {
-        return [step.startLocation.lng, step.startLocation.lat];
-      });
-      dispatch(setPolyline(listPolyline));
+      const listLegs = listRouter[0]?.legs;
+      if (listLegs.length === 1) {
+        const listSteps = listLegs[0]?.steps;
+        const listPolyline = listSteps?.map((step) => {
+          return [step.startLocation.lng, step.startLocation.lat];
+        });
+        dispatch(setPolyline(listPolyline));
+      }
+      if (listLegs.length > 1) {
+        const listPolyline = listLegs.map((item) =>
+          item.steps?.map((step) => {
+            return [step.startLocation.lng, step.startLocation.lat];
+          })
+        );
+        const newListPolyline = listPolyline.flat();
+        dispatch(setPolyline(newListPolyline));
+      }
     }
-    if (router?.result?.routes.length > 1) {
+    if (listRouter?.length > 1) {
       console.log("Có nhiều hơn 1 cách đi");
     }
   }, [router]);
@@ -74,29 +99,39 @@ const InstructionMain = ({
   /* Tạo diểm đầu, điểm cuối và giữa cho Router */
   useEffect(() => {
     if (listValue.length !== 0) {
-      if (listValue[0]) {
-        const realStart = listValue[0];
-        setStart(realStart);
-        if (listValue[listValue.length - 1]) {
-          const realEnd = listValue[listValue.length - 1];
-          setEnd(realEnd);
-        }
-      }
+      const realStart = listValue[0];
+      const realEnd = listValue[listValue.length - 1];
+      setStart(realStart);
+      setEnd(realEnd);
+      setPoints("");
       if (listValue.length > 3) {
         const other = listValue
           .slice(1, listValue.length - 1)
           .join(";")
           .replace(/\s/g, "");
-        // setPoints(other);
-        console.log(other);
+        setPoints(other);
       }
+
       if (listValue.length === 3) {
         const other = listValue.slice(1, listValue.length - 1).join("");
-        // setPoints(other);
-        console.log(other);
+        setPoints(other);
       }
     }
-  }, [listValue]);
+  }, [listValue, values]);
+
+  /* Chuyển lat lng thành text */
+  useEffect(() => {
+    locationLatLng.map((item) => {
+      async function getResults() {
+        const results = await axios(
+          `https://api.map4d.vn/sdk/v2/geocode?key=c806ce773871e686ff4c5429d1ac56a6&location=${item}
+          `
+        );
+        // setLocationText([...locationText, results.data?.result[0].address]);
+      }
+      getResults();
+    });
+  }, [locationLatLng]);
 
   /* Kết nối API Router */
   useEffect(() => {
@@ -110,6 +145,7 @@ const InstructionMain = ({
       getResults();
     }
   }, [start, end, modeValue, weighting, points]);
+
   return (
     <>
       <div className="main_content">
@@ -123,6 +159,8 @@ const InstructionMain = ({
           setItems={setItems}
           values={values}
           setValues={setValues}
+          locationLatLng={locationLatLng}
+          setLocationLatLng={setLocationLatLng}
         ></MainDragDrop>
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>

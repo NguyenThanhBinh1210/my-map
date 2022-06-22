@@ -1,4 +1,12 @@
-export const getMarker = (map, setListLocation, uuidv4, setValues, values) => {
+export const getMarker = (
+  map,
+  setListLocation,
+  uuidv4,
+  setValues,
+  values,
+  listMarker,
+  setListMarker
+) => {
   if (values.some((item) => item === null)) {
     map?.addListener("click", (args) => {
       let marker = new map4d.Marker(
@@ -23,6 +31,7 @@ export const getMarker = (map, setListLocation, uuidv4, setValues, values) => {
           return item;
         }
       });
+
       setValues(realValue);
     });
   } else {
@@ -35,9 +44,9 @@ export const getMarker = (map, setListLocation, uuidv4, setValues, values) => {
         { marker: true }
       );
       marker.setMap(map);
-
       const markerValueNumber = [args.location.lat, args.location.lng];
       const locationMarker = markerValueNumber.join(", ");
+      setListMarker([...listMarker, marker]);
       setListLocation([
         ...values,
         {
