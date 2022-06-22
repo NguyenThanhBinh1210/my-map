@@ -20,7 +20,7 @@ const Instruction = ({ showDirect }) => {
   const [showAdd, setShowAdd] = useState(false);
   const [polylineGlobal, setPolylineGlobal] = useState();
   const [values, setValues] = useState([]);
-  // console.log(values);
+  const [listMarker, setListMarker] = useState([]);
 
   /* Vẽ polyline */
   useEffect(() => {
@@ -31,12 +31,20 @@ const Instruction = ({ showDirect }) => {
       strokeWidth: 8,
     });
     setPolylineGlobal(polyline);
-    getPolyline(polylineGlobal, polyline, valueMap, values, listValue);
+    getPolyline(polylineGlobal, polyline, valueMap, values, showAdd);
   }, [values, valuePolyline]);
 
   /* Vẽ marker */
   useEffect(() => {
-    getMarker(valueMap, setListLocation, uuidv4, setValues, values);
+    getMarker(
+      valueMap,
+      setListLocation,
+      uuidv4,
+      setValues,
+      values,
+      listMarker,
+      setListMarker
+    );
   }, [values]);
 
   /* @@ */
@@ -66,6 +74,8 @@ const Instruction = ({ showDirect }) => {
             setListValue={setListValue}
             setShowAdd={setShowAdd}
             showAdd={showAdd}
+            listMarker={listMarker}
+            setListMarker={setListMarker}
           ></InstructionMain>
         </Stack>
       </Stack>

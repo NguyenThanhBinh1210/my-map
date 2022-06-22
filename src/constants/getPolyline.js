@@ -3,12 +3,12 @@ export const getPolyline = (
   polyline,
   value,
   values,
-  listValue
+  showAdd
 ) => {
   const someInputValue = values.some((value) => value === null);
   polylineGlobal?.setMap(null);
   polylineGlobal = null;
-  if (!someInputValue) {
+  if (!someInputValue && showAdd === true) {
     polyline.setMap(value);
   }
 };
