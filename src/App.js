@@ -8,7 +8,7 @@ import ListMap from "./components/ListMap/ListMap";
 import { setMap } from "./redux/features/mapSlice.js";
 
 function App() {
-  const { value: valueToggle } = useSelector((state) => state.toggle);
+  const { valueToggle } = useSelector((state) => state.boolean);
   const [showDirect, setShowDirect] = useState(true);
   const dispatch = useDispatch();
   const getMap = () => {

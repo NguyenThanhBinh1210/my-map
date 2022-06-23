@@ -59,6 +59,7 @@ export const getMarker = (
         {
           id: uuidv4(),
           label: locationMarker,
+          name: "",
         },
       ]);
     });

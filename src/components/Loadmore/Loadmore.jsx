@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Typography } from "@mui/material";
-import { setMore } from "../../redux/features/moreSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { setSuccess } from "../../redux/features/suggestSlice";
 import "./loadmore.css";
+import { setMore, setSuggest } from "../../redux/features/booleanSlice";
 const Loadmore = () => {
-  const { value: valueMore } = useSelector((state) => state.more);
+  const { valueMore } = useSelector((state) => state.boolean);
   const dispatch = useDispatch();
   const [loadmore, setLoadmore] = useState(true);
   const handleLoadMore = () => {
     setLoadmore(!loadmore);
     dispatch(setMore(loadmore));
-    dispatch(setSuccess(false));
+    dispatch(setSuggest(false));
   };
   return (
     <div onClick={handleLoadMore} className="loadmore">

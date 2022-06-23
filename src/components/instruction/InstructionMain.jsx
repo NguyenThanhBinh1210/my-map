@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import MainSelected from "./Main/MainSelected";
 import MainAddInput from "./Main/MainAddInput";
 import MainDragDrop from "./Main/MainDragDrop";
+import getRouter from "../../constants/getRouter";
 
 const InstructionMain = ({
   values,
@@ -18,6 +19,8 @@ const InstructionMain = ({
   setShowAdd,
   listMarker,
   setListMarker,
+  listText,
+  setListText,
 }) => {
   const [router, setRouter] = useState([]);
   const [weighting, setWeighting] = useState(1);
@@ -29,18 +32,6 @@ const InstructionMain = ({
   const listRouter = router?.result?.routes;
   const [items, setItems] = useState([]);
   const [height, setHeight] = useState(100);
-  const [locationText, setLocationText] = useState([]);
-  const [locationLatLng, setLocationLatLng] = useState([]);
-
-  /* Lấy 1 mảng các toạ độ */
-  useEffect(() => {
-    //
-    if (!values.some((item) => item === null)) {
-      values?.map((valueItem) => {
-        setLocationLatLng([...locationLatLng, valueItem?.label]);
-      });
-    }
-  }, [values]);
 
   /* Thêm 1 ô input */
   const handleAddInput = () => {
@@ -59,14 +50,19 @@ const InstructionMain = ({
     if (listValue.length === 2 && listValue.every((item) => item !== null)) {
       const newItems = [...items];
       const newValue = [...listValue];
+      const newListText = [...listText];
       var tmp1 = newItems[0];
       newItems[0] = newItems[1];
       newItems[1] = tmp1;
       var tmp2 = newValue[0];
       newValue[0] = newValue[1];
       newValue[1] = tmp2;
+      var tmp3 = newListText[0];
+      newListText[0] = newListText[1];
+      newListText[1] = tmp3;
       setItems(newItems);
       setListValue(newValue);
+      setListText(newListText);
     }
   };
 
@@ -119,30 +115,10 @@ const InstructionMain = ({
     }
   }, [listValue, values]);
 
-  /* Chuyển lat lng thành text */
-  useEffect(() => {
-    locationLatLng.map((item) => {
-      async function getResults() {
-        const results = await axios(
-          `https://api.map4d.vn/sdk/v2/geocode?key=c806ce773871e686ff4c5429d1ac56a6&location=${item}
-          `
-        );
-        // setLocationText([...locationText, results.data?.result[0].address]);
-      }
-      getResults();
-    });
-  }, [locationLatLng]);
-
   /* Kết nối API Router */
   useEffect(() => {
     if (start || end) {
-      async function getResults() {
-        const results = await axios(
-          `http://api.map4d.vn/sdk/route?key=c806ce773871e686ff4c5429d1ac56a6&origin=${start}&destination=${end}&points=${points}&mode=${modeValue}&weighting=${weighting}`
-        );
-        setRouter(results.data);
-      }
-      getResults();
+      getRouter(start, end, points, modeValue, weighting, setRouter);
     }
   }, [start, end, modeValue, weighting, points]);
 
@@ -159,8 +135,8 @@ const InstructionMain = ({
           setItems={setItems}
           values={values}
           setValues={setValues}
-          locationLatLng={locationLatLng}
-          setLocationLatLng={setLocationLatLng}
+          listText={listText}
+          setListText={setListText}
         ></MainDragDrop>
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>

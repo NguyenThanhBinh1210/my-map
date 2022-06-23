@@ -5,8 +5,6 @@ import DeleteIcon from "../../DeleteIcon/DeleteIcon";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useSelector } from "react-redux";
 import { initialData } from "../../../data";
-import { useDispatch } from "react-redux";
-import { setInput } from "../../../redux/features/inputSlice";
 
 const MainDragDrop = ({
   height,
@@ -18,10 +16,11 @@ const MainDragDrop = ({
   setListValue,
   values,
   setValues,
+  listText,
+  setListText,
 }) => {
   const { locations } = useSelector((state) => state.location);
   const [active, setActive] = useState("");
-  const dispatch = useDispatch();
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -42,9 +41,15 @@ const MainDragDrop = ({
       result.source.index,
       result.destination.index
     );
+    const reorderedListText = reorder(
+      listText,
+      result.source.index,
+      result.destination.index
+    );
     if (listValue.length !== 0) {
       setListValue(reorderedList);
       setItems(reorderedItems);
+      setListText(reorderedListText);
     }
   };
 
@@ -59,6 +64,7 @@ const MainDragDrop = ({
     setItems(newItems);
     setListValue(newList);
     setValues(newValues);
+
     setHeight(height - 50);
     setActive("");
     setShowAdd(true);
@@ -67,15 +73,14 @@ const MainDragDrop = ({
   /* Thay đổi input và list value */
   const handleChangeInput = (index, value) => {
     if (value === null) {
-      const lastListValue2 = [...values];
-      lastListValue2.splice(index, 1, null);
-      setValues(lastListValue2);
+      const lastListValue = [...values];
+      lastListValue.splice(index, 1, null);
+      setValues(lastListValue);
       setShowAdd(false);
-    }
-    if (value) {
-      const newList2 = [...values];
-      newList2.splice(index, 1, { id: index + 1, label: value.label });
-      setValues(newList2);
+    } else {
+      const newList = [...values];
+      newList.splice(index, 1, { id: index + 1, label: value.label });
+      setValues(newList);
     }
   };
 
@@ -84,13 +89,13 @@ const MainDragDrop = ({
     initialData[0].content = "Chọn điểm đi hoặc click trên bản đồ";
     setItems(initialData);
   }, []);
+  //
 
   /* Giới hạn add thêm input */
   useEffect(() => {
     if (values.some((value) => value === null)) {
       setShowAdd(false);
     }
-    dispatch(setInput(listValue));
     if (values.length >= 2 && !values.some((item) => item === null)) {
       setShowAdd(true);
     }
@@ -103,9 +108,7 @@ const MainDragDrop = ({
             {...provided.droppableProps}
             ref={provided.innerRef}
             className="nammoadidaphat"
-            style={{
-              height: `${height}px`,
-            }}
+            style={{ height: `${height}px` }}
           >
             {items.map((item, index) => (
               <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -125,7 +128,7 @@ const MainDragDrop = ({
                     >
                       <Autocomplete
                         className="autocomplete-css"
-                        value={values[index]?.label || null}
+                        value={listText[index]?.name || null}
                         onChange={(event, value) => {
                           handleChangeInput(index, value);
                         }}

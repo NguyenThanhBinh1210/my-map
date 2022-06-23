@@ -9,11 +9,11 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { setLocations } from "../../redux/features/locationSlice";
 import { useDispatch } from "react-redux";
+import getTextLocation from "../../constants/getTextLocation";
 
 const Instruction = ({ showDirect }) => {
   const dispatch = useDispatch();
   const [listValue, setListValue] = useState([]);
-  const { value: inputValue } = useSelector((state) => state.input);
   const { value: valueMap } = useSelector((state) => state.map);
   const { value: valuePolyline } = useSelector((state) => state.polyline);
   const [listLocation, setListLocation] = useState([]);
@@ -21,11 +21,13 @@ const Instruction = ({ showDirect }) => {
   const [polylineGlobal, setPolylineGlobal] = useState();
   const [values, setValues] = useState([]);
   const [listMarker, setListMarker] = useState([]);
+  const [listText, setListText] = useState([]);
+  const arr = [];
 
   /* Vẽ polyline */
   useEffect(() => {
     let polyline = new map4d.Polyline({
-      path: inputValue.length > 1 ? valuePolyline : [],
+      path: values.length > 1 ? valuePolyline : [],
       strokeColor: "#508ff4",
       strokeOpacity: 0.9,
       strokeWidth: 8,
@@ -45,6 +47,13 @@ const Instruction = ({ showDirect }) => {
       listMarker,
       setListMarker
     );
+  }, [values]);
+
+  /* Kết nối API chuyển toạ độ thành chữ */
+  useEffect(() => {
+    values.map((item) => {
+      getTextLocation(item?.label, values, setListText, arr);
+    });
   }, [values]);
 
   /* @@ */
@@ -76,6 +85,8 @@ const Instruction = ({ showDirect }) => {
             showAdd={showAdd}
             listMarker={listMarker}
             setListMarker={setListMarker}
+            listText={listText}
+            setListText={setListText}
           ></InstructionMain>
         </Stack>
       </Stack>

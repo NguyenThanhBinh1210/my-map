@@ -5,14 +5,13 @@ import IconButton from "@mui/material/IconButton";
 import DirectionsIcon from "@mui/icons-material/Directions";
 import Tooltip from "@mui/material/Tooltip";
 import { useDispatch } from "react-redux";
-import { setToggle } from "../../redux/features/toggleSlice";
-import { setSuccess } from "../../redux/features/suggestSlice";
+import { setSuggest, setToggle } from "../../redux/features/booleanSlice";
 import "./input.css";
 
 const Input = () => {
   const dispatch = useDispatch();
   const handleShowSuggest = () => {
-    dispatch(setSuccess(true));
+    dispatch(setSuggest(true));
   };
   const handleToogle = () => {
     dispatch(setToggle(true));
