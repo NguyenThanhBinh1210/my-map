@@ -6,7 +6,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
-import { setToggle } from "../../redux/features/toggleSlice";
+import { setToggle } from "../../redux/features/booleanSlice";
 import { useDispatch } from "react-redux";
 import { setMode } from "../../redux/features/modeSlice";
 const vehicleType = [

@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 import "./list_map.css";
 
 export default function BoxSx({ showDirect }) {
-  const { value: valueMore } = useSelector((state) => state.more);
+  const { valueMore } = useSelector((state) => state.boolean);
+
   const [dataList, setDataList] = React.useState(ImageList);
 
   return (
