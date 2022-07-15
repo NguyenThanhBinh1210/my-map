@@ -11,7 +11,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import "./direct.css";
 import { setSuggest } from "../../redux/features/booleanSlice";
 
-const Direct = ({ showDirect, setShowDirect }) => {
+const Direct = ({ showDirect, setShowDirect, setZoomX }) => {
   const dispatch = useDispatch();
   const { valueSuggest, valueMore } = useSelector((state) => state.boolean);
   const handleShowDirect = () => {
@@ -43,7 +43,7 @@ const Direct = ({ showDirect, setShowDirect }) => {
         transform: showDirect ? "" : "translateX(-100%)",
       }}
     >
-      <Input></Input>
+      <Input setZoomX={setZoomX}></Input>
       {show && <Address></Address>}
       {valueSuggest || show ? <Suggest></Suggest> : null}
       <Loadmore></Loadmore>

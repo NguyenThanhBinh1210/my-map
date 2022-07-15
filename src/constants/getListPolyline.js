@@ -1,9 +1,9 @@
-export const getPolyline = (
-  polylineGlobal,
-  polyline,
+export const getListPolyline = (
+  listPolylineGlobal,
+  listP,
   value,
   values,
-  listPolylineGlobal
+  polylineGlobal
 ) => {
   const someInputValue = values.some((value) => value === null);
   listPolylineGlobal?.map((item) => {
@@ -13,10 +13,10 @@ export const getPolyline = (
   polylineGlobal?.setMap(null);
   polylineGlobal = null;
   if (!someInputValue) {
-    listPolylineGlobal?.map((item) => {
-      item?.setMap(null);
-      item = null;
+    polylineGlobal?.setMap(null);
+    polylineGlobal = null;
+    listP?.map((item) => {
+      item?.setMap(value);
     });
-    polyline.setMap(value);
   }
 };

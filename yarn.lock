@@ -6752,6 +6752,11 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
+polyline-encoded@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/polyline-encoded/-/polyline-encoded-0.0.9.tgz#bb5212825f3331587b200f0c5368c203eb2f1905"
+  integrity sha512-xv6ONShzZdcISK6IT8x3IqsqxPq7HRqcPJ80V4et4hMolIRct5s/5dtUkfO7hGZEeKtWZ1fK7/fKur8gbd4fvg==
+
 postcss-attribute-case-insensitive@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/postcss-attribute-case-insensitive/-/postcss-attribute-case-insensitive-5.0.0.tgz#39cbf6babf3ded1e4abf37d09d6eda21c644105c"
