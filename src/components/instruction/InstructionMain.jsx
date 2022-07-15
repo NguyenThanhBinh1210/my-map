@@ -1,28 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
 import ListIconRender from "./Main/ListIconRender";
 import { useSelector } from "react-redux";
-import { setPolyline } from "../../redux/features/polylineSlice";
+import {
+  setListPolyline,
+  setPolyline,
+} from "../../redux/features/polylineSlice";
 import { useDispatch } from "react-redux";
 import MainSelected from "./Main/MainSelected";
 import MainAddInput from "./Main/MainAddInput";
 import MainDragDrop from "./Main/MainDragDrop";
 import getRouter from "../../constants/getRouter";
+import decodePolyline from "../../constants/decodePolyline";
+import swap from "../../constants/swap";
 
 const InstructionMain = ({
   values,
   setValues,
   listValue,
-  setListValue,
   showAdd,
   setShowAdd,
+  suggest,
+  setSuggest,
+  arrText,
+  setArrText,
   listMarker,
   setListMarker,
-  listText,
-  setListText,
+  polylineGlobal,
+  listPolylineGlobal,
 }) => {
   const [router, setRouter] = useState([]);
+  const realMap = useRef(null);
+  realMap.current = useSelector((state) => state.map.value);
   const [weighting, setWeighting] = useState(1);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
@@ -32,6 +41,20 @@ const InstructionMain = ({
   const listRouter = router?.result?.routes;
   const [items, setItems] = useState([]);
   const [height, setHeight] = useState(100);
+
+  /* dispatch polyline */
+  const setOverview = (value) => {
+    var list = decodePolyline(value.trim(), 5);
+    dispatch(setPolyline(list));
+  };
+
+  /* dispatch list polyline */
+  const setListOverview = (value) => {
+    const list = value.map((item) => {
+      return decodePolyline(item.trim(), 5);
+    });
+    dispatch(setListPolyline(list));
+  };
 
   /* Thêm 1 ô input */
   const handleAddInput = () => {
@@ -43,52 +66,35 @@ const InstructionMain = ({
       },
     ]);
     setHeight(height + 50);
+    polylineGlobal.setMap(null);
+    listPolylineGlobal?.map((item) => item?.setMap(null));
     setShowAdd(false);
   };
+
   /* Đổi vị trí */
   const handleSwap = () => {
     if (listValue.length === 2 && listValue.every((item) => item !== null)) {
-      const newItems = [...items];
-      const newValue = [...listValue];
-      const newListText = [...listText];
-      var tmp1 = newItems[0];
-      newItems[0] = newItems[1];
-      newItems[1] = tmp1;
-      var tmp2 = newValue[0];
-      newValue[0] = newValue[1];
-      newValue[1] = tmp2;
-      var tmp3 = newListText[0];
-      newListText[0] = newListText[1];
-      newListText[1] = tmp3;
-      setItems(newItems);
-      setListValue(newValue);
-      setListText(newListText);
+      swap(items, setItems);
+      swap(values, setValues);
+      swap(arrText, setArrText);
+      swap(suggest, setSuggest);
+      swap(listMarker, setListMarker);
     }
   };
 
   /* Lấy dữ liệu lng, lat trả về từ API */
   useEffect(() => {
     if (listRouter) {
-      const listLegs = listRouter[0]?.legs;
-      if (listLegs.length === 1) {
-        const listSteps = listLegs[0]?.steps;
-        const listPolyline = listSteps?.map((step) => {
-          return [step.startLocation.lng, step.startLocation.lat];
-        });
-        dispatch(setPolyline(listPolyline));
-      }
-      if (listLegs.length > 1) {
-        const listPolyline = listLegs.map((item) =>
-          item.steps?.map((step) => {
-            return [step.startLocation.lng, step.startLocation.lat];
-          })
+      if (listRouter?.length > 1) {
+        const listOverview = router?.result?.routes.map(
+          (item) => item.overviewPolyline
         );
-        const newListPolyline = listPolyline.flat();
-        dispatch(setPolyline(newListPolyline));
+        setListOverview(listOverview);
       }
-    }
-    if (listRouter?.length > 1) {
-      console.log("Có nhiều hơn 1 cách đi");
+      if (listRouter?.length === 1) {
+        const overview = router?.result?.routes[0]?.overviewPolyline;
+        setOverview(overview);
+      }
     }
   }, [router]);
 
@@ -107,7 +113,6 @@ const InstructionMain = ({
           .replace(/\s/g, "");
         setPoints(other);
       }
-
       if (listValue.length === 3) {
         const other = listValue.slice(1, listValue.length - 1).join("");
         setPoints(other);
@@ -131,12 +136,15 @@ const InstructionMain = ({
           items={items}
           setShowAdd={setShowAdd}
           listValue={listValue}
-          setListValue={setListValue}
           setItems={setItems}
           values={values}
           setValues={setValues}
-          listText={listText}
-          setListText={setListText}
+          suggest={suggest}
+          setSuggest={setSuggest}
+          arrText={arrText}
+          setArrText={setArrText}
+          listMarker={listMarker}
+          setListMarker={setListMarker}
         ></MainDragDrop>
       </div>
       <ListIconRender items={items} handleSwap={handleSwap}></ListIconRender>

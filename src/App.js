@@ -11,10 +11,11 @@ function App() {
   const { valueToggle } = useSelector((state) => state.boolean);
   const [showDirect, setShowDirect] = useState(true);
   const dispatch = useDispatch();
+  const [zoomX, setZoomX] = useState(15);
   const getMap = () => {
     let options = {
       center: { lat: 16.072163491469226, lng: 108.22690536081757 },
-      zoom: 15,
+      zoom: zoomX,
       controls: true,
       mapType: "roadmap",
     };
@@ -32,7 +33,11 @@ function App() {
       style={{ width: "100%", height: "100vh", position: "relative" }}
     >
       <ListMap showDirect={showDirect} />
-      <Direct showDirect={showDirect} setShowDirect={setShowDirect} />
+      <Direct
+        showDirect={showDirect}
+        setShowDirect={setShowDirect}
+        setZoomX={setZoomX}
+      />
       {valueToggle && <Instruction showDirect={showDirect} />}
     </div>
   );

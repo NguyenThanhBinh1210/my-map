@@ -31,11 +31,25 @@ const vehicleType = [
     icon: DirectionsWalkIcon,
   },
 ];
-const InstructionHeader = () => {
+const InstructionHeader = ({
+  listMarker,
+  setListMarker,
+  polylineGlobal,
+  listPolylineGlobal,
+}) => {
   const dispatch = useDispatch();
   const [active, setActive] = useState("Lái xe");
   const handleClose = () => {
     dispatch(setToggle(false));
+    const newlistMarker = [...listMarker];
+    newlistMarker.map((item) => {
+      item.setMap(null);
+      item === null;
+    });
+    setListMarker(newlistMarker);
+    polylineGlobal?.setMap(null);
+    polylineGlobal = null;
+    listPolylineGlobal?.map((item) => item?.setMap(null));
   };
   const [modeType, setModeType] = useState("car");
   useEffect(() => {
