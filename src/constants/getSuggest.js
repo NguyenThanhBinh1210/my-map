@@ -18,15 +18,10 @@ function getSuggest(index, text, suggest, setSuggest) {
           },
         };
       });
-
+      let indexSuggest = suggest.findIndex((item) => item === null);
       if (suggest.some((item) => item === null)) {
-        const newSuggest = suggest.map((item) => {
-          if (item === null) {
-            return finalSuggest;
-          } else {
-            return item;
-          }
-        });
+        const newSuggest = [...suggest];
+        newSuggest.splice(indexSuggest, 1, finalSuggest);
         setSuggest(newSuggest);
       } else {
         const newSuggest = [...suggest];

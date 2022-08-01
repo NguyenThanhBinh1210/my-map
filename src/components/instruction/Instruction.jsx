@@ -14,8 +14,9 @@ const Instruction = ({ showDirect }) => {
   const realMap = useRef(null);
   realMap.current = useSelector((state) => state.map.value);
   const [listValue, setListValue] = useState([]);
-  const { value: valuePolyline } = useSelector((state) => state.polyline);
-  const { values: listPolyline } = useSelector((state) => state.polyline);
+  const { value: valuePolyline, values: listPolyline } = useSelector(
+    (state) => state.polyline
+  );
   const [showAdd, setShowAdd] = useState(false);
   const [polylineGlobal, setPolylineGlobal] = useState();
   const [listPolylineGlobal, setListPolylineGlobal] = useState();
@@ -30,7 +31,7 @@ const Instruction = ({ showDirect }) => {
   const [eventClick, setEventClick] = useState();
   const [maxId, setMaxId] = useState();
   const idMarker = listMarker.find((item) => item?.id === maxId)?.id;
-
+  let markerEnd = useRef();
   /* Lấy index polyline từ click polyline */
   useEffect(() => {
     if (listPolylineGlobal) {
@@ -146,29 +147,25 @@ const Instruction = ({ showDirect }) => {
         {
           position: location,
           draggable: true,
-          iconView: `<div style=\"width: 10px; height: 10px; background-color: white;border: 4px solid black;border-radius:100rem; text-align: center; \"></div>`,
+          anchor: [0.5, 1.0],
+          iconView:
+            // idMarker === maxId
+            // `<div style=\"position: relative; display: flex; flex-direction: column;align-items: center; \"><div style=\"background-color: red;width: 20px;height: 20px;border-radius: 100rem;display: flex;justify-content: center; align-items: center; \">
+            // <div style=\"width: 10px;height: 10px;background-color: gray;border-radius: 100rem;\"></div></div>
+            // <div style=\"width: 0;height: 0;border-left: 8px solid transparent;border-right: 8px solid transparent;border-top: 12px solid #f00; position: absolute;bottom: 8px;\"></div>
+            // <div style=\"width: 16px;height: 16px;background-color: black;border-radius: 100rem; display: flex;justify-content: center;align-items: center;\">
+            // <div style=\"width: 8px; height: 8px; background-color: white;border-radius: 100rem;\"></div></div> </div>`
+            `<div style=\"width: 10px; height: 10px; background-color: white;border: 4px solid black;border-radius:100rem; text-align: center; \"></div>`,
         },
         { marker: true }
       );
-      let markerEnd = new map4d.Marker(
-        {
-          position: location,
-          draggable: true,
-          iconView: `<div style=\"width: 10px; height: 10px; background-color: red;border: 4px solid black;border-radius:100rem; text-align: center; \"></div>`,
-        },
-        { marker: true }
-      );
-      // if (idMarker === maxId) {
-      //   markerEnd.setMap(realMap.current);
-      //   setListMarker((prev) => [...prev, markerEnd]);
-      // }
-      // if (idMarker !== maxId) {
       markerStart.setMap(realMap.current);
       setListMarker((prev) => [...prev, markerStart]);
-      // }
 
       const locationMarker = [location.lat, location.lng].join(", ");
       locationMarkerReal.push(locationMarker);
+      let indexValue = values.findIndex((item) => item === null);
+      let indexMarker = listMarker.findIndex((item) => item === null);
       if (location) {
         if (!values.some((item) => item === null)) {
           setValues((prev) => [
@@ -179,29 +176,17 @@ const Instruction = ({ showDirect }) => {
             },
           ]);
         } else {
-          setValues(
-            values.map((item) => {
-              if (item === null) {
-                return {
-                  id: uuidv4(),
-                  label: locationMarkerReal.join(),
-                };
-              } else {
-                return item;
-              }
-            })
-          );
+          const newValue = [...values];
+          newValue.splice(indexValue, 1, {
+            id: uuidv4(),
+            label: locationMarkerReal.join(),
+          });
+          setValues(newValue);
         }
         if (listMarker.some((item) => item === null)) {
-          setListMarker(
-            listMarker.map((item) => {
-              if (item === null) {
-                return markerStart;
-              } else {
-                return item;
-              }
-            })
-          );
+          const newMarker = [...listMarker];
+          newMarker.splice(indexMarker, 1, markerStart);
+          setListMarker(newMarker);
         }
       }
     }
@@ -256,6 +241,7 @@ const Instruction = ({ showDirect }) => {
             setListMarker={setListMarker}
             polylineGlobal={polylineGlobal}
             listPolylineGlobal={listPolylineGlobal}
+            location={location}
           ></InstructionMain>
         </Stack>
       </Stack>
