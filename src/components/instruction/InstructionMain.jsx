@@ -28,6 +28,7 @@ const InstructionMain = ({
   setListMarker,
   polylineGlobal,
   listPolylineGlobal,
+  location,
 }) => {
   const [router, setRouter] = useState([]);
   const realMap = useRef(null);
@@ -65,6 +66,7 @@ const InstructionMain = ({
         content: "Chọn điểm đến",
       },
     ]);
+
     setHeight(height + 50);
     polylineGlobal.setMap(null);
     listPolylineGlobal?.map((item) => item?.setMap(null));
